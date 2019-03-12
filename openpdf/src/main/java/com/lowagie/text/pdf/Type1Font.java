@@ -261,7 +261,7 @@ class Type1Font extends BaseFont
     int getRawWidth(int c, String name) {
         Object[] metrics;
         if (name == null) { // font specific
-            metrics = charMetrics.get(Integer.valueOf(c));
+            metrics = charMetrics.get(c);
         }
         else {
             if (name.equals(".notdef"))
@@ -372,8 +372,8 @@ class Type1Font extends BaseFont
                 isMetrics = false;
                 break;
             }
-            Integer C = Integer.valueOf(-1);
-            Integer WX = Integer.valueOf(250);
+            Integer C = -1;
+            Integer WX = 250;
             String N = "";
             int[] B = null;
 
@@ -385,9 +385,9 @@ class Type1Font extends BaseFont
                     continue;
                 ident = tokc.nextToken();
                 if (ident.equals("C"))
-                    C = Integer.valueOf(tokc.nextToken());
+                    C = Integer.parseInt(tokc.nextToken());
                 else if (ident.equals("WX"))
-                    WX = Integer.valueOf((int)Float.parseFloat(tokc.nextToken()));
+                    WX = (int)Float.parseFloat(tokc.nextToken());
                 else if (ident.equals("N"))
                     N = tokc.nextToken();
                 else if (ident.equals("B")) {
@@ -435,7 +435,7 @@ class Type1Font extends BaseFont
             {
                 String first = tok.nextToken();
                 String second = tok.nextToken();
-                Integer width = Integer.valueOf((int)Float.parseFloat(tok.nextToken()));
+                Integer width = (int)Float.parseFloat(tok.nextToken());
                 Object[] relates = kernPairs.get(first);
                 if (relates == null)
                     kernPairs.put(first, new Object[]{second, width});
@@ -748,13 +748,13 @@ class Type1Font extends BaseFont
             return false;
         Object[] obj = kernPairs.get(first);
         if (obj == null) {
-            obj = new Object[]{second, Integer.valueOf(kern)};
+            obj = new Object[]{second, kern};
             kernPairs.put(first, obj);
             return true;
         }
         for (int k = 0; k < obj.length; k += 2) {
             if (second.equals(obj[k])) {
-                obj[k + 1] = Integer.valueOf(kern);
+                obj[k + 1] = kern;
                 return true;
             }
         }
@@ -762,7 +762,7 @@ class Type1Font extends BaseFont
         Object[] obj2 = new Object[size + 2];
         System.arraycopy(obj, 0, obj2, 0, size);
         obj2[size] = second;
-        obj2[size + 1] = Integer.valueOf(kern);
+        obj2[size + 1] = kern;
         kernPairs.put(first, obj2);
         return true;
     }
@@ -770,7 +770,7 @@ class Type1Font extends BaseFont
     protected int[] getRawCharBBox(int c, String name) {
         Object[] metrics;
         if (name == null) { // font specific
-            metrics = charMetrics.get(Integer.valueOf(c));
+            metrics = charMetrics.get(c);
         }
         else {
             if (name.equals(".notdef"))

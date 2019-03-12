@@ -122,7 +122,7 @@ public class PdfPageLabels {
         if (firstPage != 1) {
             dic.put(PdfName.ST, new PdfNumber(firstPage));
         }
-        map.put(Integer.valueOf(page - 1), dic);
+        map.put(page - 1, dic);
     }
 
     /**
@@ -169,7 +169,7 @@ public class PdfPageLabels {
         if (page <= 1) {
             return;
         }
-        map.remove(Integer.valueOf(page - 1));
+        map.remove(page - 1);
     }
 
     /**
@@ -211,7 +211,7 @@ public class PdfPageLabels {
         char type = 'D';
         String prefix = "";
         for (int i = 0; i < n; i++ ) {
-            current = Integer.valueOf(i);
+            current = i;
             if (numberTree.containsKey(current)) {
                 PdfDictionary d = (PdfDictionary) PdfReader.getPdfObjectRelease(numberTree.get(current));
                 if (d.contains(PdfName.ST)) {

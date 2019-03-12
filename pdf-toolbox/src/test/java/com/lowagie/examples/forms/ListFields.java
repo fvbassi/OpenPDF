@@ -81,7 +81,7 @@ public class ListFields {
                             if (tName != null)
                                 fName = tName.toString() + "." + fName;
                             if (ref != null) {
-                                field = refToField.get(Integer.valueOf(ref.getNumber()));
+                                field = refToField.get(ref.getNumber());
                             }
                             ref = annotDict.getAsIndirectObject(PdfName.PARENT);
                             annotDict = annotDict.getAsDict(PdfName.PARENT);

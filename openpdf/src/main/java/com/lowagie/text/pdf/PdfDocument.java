@@ -2579,10 +2579,10 @@ public class PdfDocument extends Document {
 
             Integer i = rowspanMap.get(c);
             if (i == null) {
-                i = Integer.valueOf(c.rowspan());
+                i = c.rowspan();
             }
 
-            i = Integer.valueOf(i.intValue() - 1);
+            i = i.intValue() - 1;
             rowspanMap.put(c, i);
 
             if (i.intValue() < 1) {

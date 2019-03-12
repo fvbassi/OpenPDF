@@ -90,10 +90,10 @@ public class CMap
     {
         String result = null;
         if (hasTwoByteMappings()) {
-            result = doubleByteMappings.get(Integer.valueOf(code));
+            result = doubleByteMappings.get(code);
         }
         if (result == null && code <= 0xff && hasOneByteMappings()) {
-            result = singleByteMappings.get(Integer.valueOf(code & 0xff));
+            result = singleByteMappings.get(code & 0xff);
         }
         return result;
     }
@@ -115,7 +115,7 @@ public class CMap
         if( length == 1 )
         {
 
-            key = Integer.valueOf( code[offset] & 0xff );
+            key =  code[offset] & 0xff ;
             result = singleByteMappings.get( key );
         }
         else if( length == 2 )
@@ -123,7 +123,7 @@ public class CMap
             int intKey = code[offset] & 0xff;
             intKey <<= 8;
             intKey += code[offset+1] & 0xff;
-            key = Integer.valueOf( intKey );
+            key =  intKey ;
 
             result = doubleByteMappings.get( key );
         }
@@ -143,14 +143,14 @@ public class CMap
     {
         if( src.length == 1 )
         {
-            singleByteMappings.put( Integer.valueOf( src[0] & 0xff ), dest );
+            singleByteMappings.put(  src[0] & 0xff , dest );
         }
         else if( src.length == 2 )
         {
             int intSrc = src[0]&0xFF;
             intSrc <<= 8;
             intSrc |= (src[1]&0xFF);
-            doubleByteMappings.put( Integer.valueOf( intSrc), dest );
+            doubleByteMappings.put(  intSrc, dest );
         }
         else
         {

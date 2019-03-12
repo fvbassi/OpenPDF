@@ -60,9 +60,9 @@ public class FormList {
             fldDef.setOptions( TextField.MULTISELECT );
 
             List<Integer> selections = new ArrayList<>(3);
-            selections.add( Integer.valueOf(1) );
-            selections.add( Integer.valueOf(3) );
-            selections.add( Integer.valueOf(5) );
+            selections.add( 1 );
+            selections.add( 3 );
+            selections.add( 5 );
             fldDef.setChoiceSelections( selections ); // index into chioces
 
             PdfFormField field = fldDef.getListField();

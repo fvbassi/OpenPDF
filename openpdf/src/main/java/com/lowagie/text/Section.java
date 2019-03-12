@@ -596,7 +596,7 @@ public class Section implements ComposedElement<Element>, TextElementArray, Larg
      * Changes the Chapter number.
      */
     public void setChapterNumber(int number) {
-        numbers.set(numbers.size() - 1, Integer.valueOf(number));
+        numbers.set(numbers.size() - 1, number);
         for(Element e : getChildren()) {
             if (e instanceof Section) {
                 ((Section)e).setChapterNumber(number);
@@ -623,7 +623,7 @@ public class Section implements ComposedElement<Element>, TextElementArray, Larg
      */
     private void setNumbers(int number, ArrayList<Integer> numbers) {
         this.numbers = new ArrayList<>();
-        this.numbers.add(Integer.valueOf(number));
+        this.numbers.add(number);
         this.numbers.addAll(numbers);
     }
 

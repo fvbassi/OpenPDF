@@ -97,7 +97,7 @@ public class GlyphList {
         }
         hex = t2.nextToken();
         int num = Integer.parseInt(hex, 16);
-        unicode2names.put(Integer.valueOf(num), name);
+        unicode2names.put(num, name);
         names2unicode.put(name, new int[]{ num });
       }
     } catch (Exception e) {
@@ -110,6 +110,6 @@ public class GlyphList {
   }
 
   public static String unicodeToName(int num) {
-    return unicode2names.get(Integer.valueOf(num));
+    return unicode2names.get(num);
   }
 }

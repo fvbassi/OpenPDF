@@ -81,7 +81,7 @@ public class IndexEvents extends PdfPageEventHelper {
      */
     public void onGenericTag(PdfWriter writer, Document document,
             Rectangle rect, String text) {
-        indextag.put(text, Integer.valueOf(writer.getPageNumber()));
+        indextag.put(text, writer.getPageNumber());
     }
 
     // --------------------------------------------------------------------
@@ -343,7 +343,7 @@ public class IndexEvents extends PdfPageEventHelper {
          * @param tag
          */
         public void addPageNumberAndTag(final int number, final String tag) {
-            pagenumbers.add(Integer.valueOf(number));
+            pagenumbers.add(number);
             tags.add(tag);
         }
 

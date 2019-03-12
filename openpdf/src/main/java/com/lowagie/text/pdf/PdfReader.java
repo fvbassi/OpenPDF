@@ -1544,7 +1544,7 @@ public class PdfReader implements PdfViewerPreferences, Closeable {
             if (partial) {
               objStmToOffset.put(field2, 0);
             } else {
-              Integer on = Integer.valueOf(field2);
+              Integer on = field2;
               IntHashtable seq = objStmMark.get(on);
               if (seq == null) {
                 seq = new IntHashtable();

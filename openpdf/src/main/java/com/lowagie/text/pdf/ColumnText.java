@@ -1234,7 +1234,7 @@ public class ColumnText {
                         else ++count;
                     }
                     else if (obj instanceof com.lowagie.text.List) {
-                        stack.push(new Object[]{list, Integer.valueOf(k), new Float(listIndentation)});
+                        stack.push(new Object[]{list, k, new Float(listIndentation)});
                         list = (com.lowagie.text.List)obj;
                         items = list.getChildren();
                         listIndentation += list.getIndentationLeft();

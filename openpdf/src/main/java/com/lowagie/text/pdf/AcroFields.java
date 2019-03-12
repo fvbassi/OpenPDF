@@ -599,7 +599,7 @@ public class AcroFields {
               PRIndirectReference por = (PRIndirectReference) po;
               BaseFont bp = new DocumentFont((PRIndirectReference) po);
               tx.setFont(bp);
-              Integer porkey = Integer.valueOf(por.getNumber());
+              Integer porkey = por.getNumber();
               BaseFont porf = extensionFonts.get(porkey);
               if (porf == null) {
                 if (!extensionFonts.containsKey(porkey)) {
@@ -806,7 +806,7 @@ public class AcroFields {
         for (int j = 0; j < values.length; ++j) {
           String val = values[j];
           if (val != null && val.equals(choicesExp[k])) {
-            indexes.add(Integer.valueOf(k));
+            indexes.add(k);
             break;
           }
         }
@@ -2026,7 +2026,7 @@ public class AcroFields {
      * @since 2.1.5
      */
     void addPage(int pg) {
-      page.add(Integer.valueOf(pg));
+      page.add(pg);
     }
 
     /**
@@ -2035,7 +2035,7 @@ public class AcroFields {
      * @since 2.1.5
      */
     void forcePage(int idx, int pg) {
-      page.set(idx, Integer.valueOf(pg));
+      page.set(idx, pg);
     }
 
     /**
@@ -2054,7 +2054,7 @@ public class AcroFields {
      * @since 2.1.5
      */
     void addTabOrder(int order) {
-      tabOrder.add(Integer.valueOf(order));
+      tabOrder.add(order);
     }
   }
 

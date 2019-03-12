@@ -933,7 +933,7 @@ public class PdfGraphics2D extends Graphics2D {
         g2.kid = true;
         if (this.children == null)
             this.children = new ArrayList<>();
-        this.children.add(Integer.valueOf(cb.getInternalBuffer().size()));
+        this.children.add(cb.getInternalBuffer().size());
         this.children.add(g2);
         return g2;
     }

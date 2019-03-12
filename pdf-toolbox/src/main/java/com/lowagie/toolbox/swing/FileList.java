@@ -181,7 +181,7 @@ public class FileList
         case 0:
           return filevector.get(row).getFile().getName();
         case 1:
-          return Integer.valueOf(filevector.get(row).getPages());
+          return filevector.get(row).getPages();
         case 2:
           return filevector.get(row).getFile().getParent();
       }

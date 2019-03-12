@@ -72,7 +72,7 @@ import com.lowagie.text.pdf.AcroFields.Item;
 class PdfCopyFieldsImp extends PdfWriter {
 
     private static final PdfName iTextTag = new PdfName("_iTextTag_");
-    private static final Integer zero = Integer.valueOf(0);
+    private static final Integer zero = 0;
     List<PdfReader> readers = new ArrayList<>();
     Map<PdfReader,IntHashtable> readers2intrefs = new HashMap<>();
     Map<PdfReader,IntHashtable> pages2intrefs = new HashMap<>();
@@ -244,7 +244,7 @@ class PdfCopyFieldsImp extends PdfWriter {
             for (int k = 0; k < size; ++k) {
                 t.add(zero);
             }
-            t.add(Integer.valueOf(v));
+            t.add(v);
             tabOrder.put(annots, t);
             annots.add(ind);
         }
@@ -252,14 +252,14 @@ class PdfCopyFieldsImp extends PdfWriter {
             int size = t.size() - 1;
             for (int k = size; k >= 0; --k) {
                 if (t.get(k).intValue() <= v) {
-                    t.add(k + 1, Integer.valueOf(v));
+                    t.add(k + 1, v);
                     annots.add(k + 1, ind);
                     size = -2;
                     break;
                 }
             }
             if (size != -2) {
-                t.add(0, Integer.valueOf(v));
+                t.add(0, v);
                 annots.add(0, ind);
             }
         }

@@ -459,14 +459,14 @@ public class PdfWriter extends DocWriter implements
                 if (first + len == entry.getRefnum())
                     ++len;
                 else {
-                    sections.add(Integer.valueOf(first));
-                    sections.add(Integer.valueOf(len));
+                    sections.add(first);
+                    sections.add(len);
                     first = entry.getRefnum();
                     len = 1;
                 }
             }
-            sections.add(Integer.valueOf(first));
-            sections.add(Integer.valueOf(len));
+            sections.add(first);
+            sections.add(len);
             if (writer.isFullCompression()) {
                 int mid = 4;
                 int mask = 0xff000000;

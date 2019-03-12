@@ -569,7 +569,7 @@ public class DocumentFont extends BaseFont {
     if (cjkMirror != null) {
       return cjkMirror.getWidth(char1);
     } else if (isType0) {
-      int[] ws = metrics.get(Integer.valueOf(char1));
+      int[] ws = metrics.get(char1);
       if (ws != null) {
         return ws[1];
       } else {
@@ -587,7 +587,7 @@ public class DocumentFont extends BaseFont {
       char[] chars = text.toCharArray();
       int total = 0;
       for (char aChar : chars) {
-        int[] ws = metrics.get(Integer.valueOf(aChar));
+        int[] ws = metrics.get(aChar);
         if (ws != null) {
           total += ws[1];
         }
@@ -607,7 +607,7 @@ public class DocumentFont extends BaseFont {
       byte[] b = new byte[len * 2];
       int bptr = 0;
       for (char aChar : chars) {
-        int[] ws = metrics.get(Integer.valueOf(aChar));
+        int[] ws = metrics.get(aChar);
         if (ws != null) {
           int g = ws[0];
           b[bptr++] = (byte) (g / 256);
@@ -644,7 +644,7 @@ public class DocumentFont extends BaseFont {
     if (cjkMirror != null) {
       return PdfEncodings.convertToBytes((char) char1, CJKFont.CJK_ENCODING);
     } else if (isType0) {
-      int[] ws = metrics.get(Integer.valueOf(char1));
+      int[] ws = metrics.get(char1);
       if (ws != null) {
         int g = ws[0];
         return new byte[]{(byte) (g / 256), (byte) (g)};
@@ -668,7 +668,7 @@ public class DocumentFont extends BaseFont {
     if (cjkMirror != null) {
       return cjkMirror.charExists(c);
     } else if (isType0) {
-      return metrics.containsKey(Integer.valueOf(c));
+      return metrics.containsKey(c);
     } else {
       return super.charExists(c);
     }

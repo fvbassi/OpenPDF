@@ -137,13 +137,13 @@ class TrueTypeFontUnicode extends TrueTypeFont implements Comparator<int[]> {
             for (Map.Entry<Integer,int[]> entry : cmap.entrySet()) {
                 Integer code = entry.getKey();
                 int[] metrics = entry.getValue();
-                inverseCmap.put(Integer.valueOf(metrics[0]), code);
+                inverseCmap.put(metrics[0], code);
             }
         }
     }
 
     protected Integer getCharacterCode(int code) {
-        return inverseCmap == null ? null : inverseCmap.get(Integer.valueOf(code));
+        return inverseCmap == null ? null : inverseCmap.get(code);
     }
 
 
@@ -494,7 +494,7 @@ class TrueTypeFontUnicode extends TrueTypeFont implements Comparator<int[]> {
      */
     public int[] getMetricsTT(int c) {
         if (cmapExt != null)
-            return cmapExt.get(Integer.valueOf(c));
+            return cmapExt.get(c);
         Map<Integer,int[]> map = null;
         if (fontSpecific)
             map = cmap10;
@@ -504,12 +504,12 @@ class TrueTypeFontUnicode extends TrueTypeFont implements Comparator<int[]> {
             return null;
         if (fontSpecific) {
             if ((c & 0xffffff00) == 0 || (c & 0xffffff00) == 0xf000)
-                return map.get(Integer.valueOf(c & 0xff));
+                return map.get(c & 0xff);
             else
                 return null;
         }
         else
-            return map.get(Integer.valueOf(c));
+            return map.get(c);
     }
 
     /**
