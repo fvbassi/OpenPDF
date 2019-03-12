@@ -1,15 +1,15 @@
 /*
  * $Id: RegisterFont.java 3373 2008-05-12 16:21:24Z xlv $
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
- * http://itextdocs.lowagie.com/tutorial/
+ * https://github.com/LibrePDF/OpenPDF/wiki/Tutorial
  *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 package com.lowagie.examples.fonts.getting;
 
@@ -17,7 +17,6 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -69,25 +68,22 @@ public class RegisterFont {
             document.add(new Paragraph(text3, font3));
             BufferedWriter out = new BufferedWriter(new FileWriter("registered.txt"));
             out.write("These fonts were registered at the FontFactory:\r\n");
-            for (Iterator i = FontFactory.getRegisteredFonts().iterator(); i.hasNext(); ) {
-                out.write((String) i.next());
+            for (Object o1 : FontFactory.getRegisteredFonts()) {
+                out.write((String) o1);
                 out.write("\r\n");
             }
             out.write("\r\n\r\nThese are the families these fonts belong to:\r\n");
-            for (Iterator i = FontFactory.getRegisteredFamilies().iterator(); i.hasNext(); ) {
-                out.write((String) i.next());
+            for (Object o : FontFactory.getRegisteredFamilies()) {
+                out.write((String) o);
                 out.write("\r\n");
             }
             out.flush();
             out.close();
         }
-        catch(DocumentException de) {
+        catch(DocumentException | IOException de) {
             System.err.println(de.getMessage());
         }
-        catch(IOException ioe) {
-            System.err.println(ioe.getMessage());
-        }
-        
+
         // step 5: we close the document
         document.close();
 

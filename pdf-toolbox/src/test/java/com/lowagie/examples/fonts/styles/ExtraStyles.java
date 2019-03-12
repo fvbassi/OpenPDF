@@ -1,15 +1,15 @@
 /*
  * $Id: ExtraStyles.java 3373 2008-05-12 16:21:24Z xlv $
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
- * http://itextdocs.lowagie.com/tutorial/
+ * https://github.com/LibrePDF/OpenPDF/wiki/Tutorial
  *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 
 package com.lowagie.examples.fonts.styles;
@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Demonstrates how to underline and strike through text.
@@ -64,7 +65,7 @@ class ExtraStyles {
             // step 5: we close the document
             document.close();
 
-            assertFalse(baos.size() == 0);
+            assertNotEquals(0, baos.size());
         }
 
     }

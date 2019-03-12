@@ -1,22 +1,21 @@
 /*
  * $Id: Glossary.java 3373 2008-05-12 16:21:24Z xlv $
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
- * http://itextdocs.lowagie.com/tutorial/
+ * https://github.com/LibrePDF/OpenPDF/wiki/Tutorial
  *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 
 package com.lowagie.examples.objects.chunk;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.TreeMap;
 
 import com.lowagie.text.Chunk;
@@ -47,7 +46,7 @@ public class Glossary extends PdfPageEventHelper {
      * @see com.lowagie.text.pdf.PdfPageEventHelper#onGenericTag(com.lowagie.text.pdf.PdfWriter, com.lowagie.text.Document, com.lowagie.text.Rectangle, java.lang.String)
      */
     public void onGenericTag(PdfWriter writer, Document document, Rectangle rect, String text) {
-        glossary.put(text, new Integer(writer.getPageNumber()));
+        glossary.put(text, writer.getPageNumber());
     }
     
     /**
@@ -114,18 +113,16 @@ public class Glossary extends PdfPageEventHelper {
             
             // we add the glossary
             document.newPage();
-            for (Iterator i = generic.glossary.keySet().iterator(); i.hasNext(); ) {
-                String key = (String) i.next();
-                int page = ((Integer) generic.glossary.get(key)).intValue();
+            for (Object o : generic.glossary.keySet()) {
+                String key = (String) o;
+                int page = (Integer) generic.glossary.get(key);
                 Paragraph g = new Paragraph(key);
                 g.add(" : page ");
                 g.add(String.valueOf(page));
                 document.add(g);
             }
-        } catch (DocumentException de) {
+        } catch (DocumentException | IOException de) {
             System.err.println(de.getMessage());
-        } catch (IOException ioe) {
-            System.err.println(ioe.getMessage());
         }
 
         // step 5: we close the document

@@ -1,15 +1,15 @@
 /*
  * $Id: EncodingFont.java 3428 2008-05-24 18:33:09Z xlv $
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
- * http://itextdocs.lowagie.com/tutorial/
+ * https://github.com/LibrePDF/OpenPDF/wiki/Tutorial
  *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 package com.lowagie.examples.fonts;
 
@@ -65,14 +65,12 @@ public class EncodingFont {
                 table.setWidthPercentage(100);
                 table.getDefaultCell().setBorderWidth(1);
                 table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-                for (int k = 0; k < tb.length; ++k) {
-                    char c = tb[k];
+                for (char c : tb) {
                     if (bf.charExists(c)) {
                         Phrase ph = new Phrase(12, new String(new char[]{c}), f);
                         ph.add(new Phrase(12, "\n\n" + cst(c), hex));
                         table.addCell(ph);
-                    }
-                    else {
+                    } else {
                         Phrase ph = new Phrase("\u00a0");
                         ph.add(new Phrase(12, "\n\n" + cst(c), hex));
                         table.addCell(ph);

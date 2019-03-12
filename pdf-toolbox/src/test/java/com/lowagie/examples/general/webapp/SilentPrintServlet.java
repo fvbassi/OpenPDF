@@ -1,15 +1,15 @@
 /*
  * $Id: SilentPrintServlet.java 3373 2008-05-12 16:21:24Z xlv $
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
- * http://itextdocs.lowagie.com/tutorial/v
+ * https://github.com/LibrePDF/OpenPDF/wiki/Tutorialv
  *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 
 package com.lowagie.examples.general.webapp;
@@ -17,7 +17,6 @@ package com.lowagie.examples.general.webapp;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
