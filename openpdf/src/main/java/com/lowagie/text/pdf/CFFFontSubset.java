@@ -322,21 +322,13 @@ public class CFFFontSubset extends CFFFont {
     {
         int[] FDSelect = fonts[Font].FDSelect;
         // For each glyph used
-        for (Object o : glyphsInList) {
+        for (int glyph : glyphsInList) {
             // Pop the glyphs index
-<<<<<<< HEAD
-            int glyph = glyphsInList.get(i).intValue();
-=======
-            int glyph = (Integer) o;
->>>>>>> refs/remotes/origin/master
+
             // Pop the glyph's FD
-            int FD = FDSelect[glyph];
+            int fd = FDSelect[glyph];
             // Put the FD index into the FDArrayUsed HashMap
-<<<<<<< HEAD
-            fdArrayUsed.put(FD,null);
-=======
-            FDArrayUsed.put(FD, null);
->>>>>>> refs/remotes/origin/master
+            fdArrayUsed.put(fd, null);
         }
     }
 
@@ -460,14 +452,14 @@ public class CFFFontSubset extends CFFFont {
                 // The FDArray index, Hash Map, Array List to work on
                 hSubrsUsed[fd] = new HashMap();
                 lSubrsUsed[fd] = new ArrayList();
-                //Reads the private dicts looking for the subr operator and 
+                //Reads the private dicts looking for the subr operator and
                 // store both the offset for the index and its offset array
                 BuildFDSubrsOffsets(Font, fd);
                 // Verify that FDPrivate has a LSubrs index
                 if(fonts[Font].PrivateSubrsOffset[fd]>=0)
                 {
-                    //Scans the Charstring data storing the used Local and Global subroutines 
-                    // by the glyphs. Scans the Subrs recursively. 
+                    //Scans the Charstring data storing the used Local and Global subroutines
+                    // by the glyphs. Scans the Subrs recursively.
                 	buildSubrUsed(Font, fd, fonts[Font].PrivateSubrsOffset[fd], fonts[Font].PrivateSubrsOffsetsArray[fd], hSubrsUsed[fd], lSubrsUsed[fd]);
                     // Builds the New Local Subrs index
                 	newLSubrsIndex[fd] = buildNewIndex(fonts[Font].PrivateSubrsOffsetsArray[fd], hSubrsUsed[fd], RETURN_OP);
@@ -509,7 +501,7 @@ public class CFFFontSubset extends CFFFont {
         while (getPosition() < fonts[Font].fdprivateOffsets[FD]+fonts[Font].fdprivateLengths[FD])
         {
             getDictItem();
-            // If the dictItem is the "Subrs" then find and store offset, 
+            // If the dictItem is the "Subrs" then find and store offset,
             if (Objects.equals(key, "Subrs"))
                 fonts[Font].PrivateSubrsOffset[FD] = (Integer) args[0] +fonts[Font].fdprivateOffsets[FD];
         }
@@ -551,7 +543,7 @@ public class CFFFontSubset extends CFFFont {
                     // Find the Subrs called by the glyph and insert to hash:
                 readASubr(Start, End, gBias, LBias, hSubr, lSubr, SubrsOffsets);
             } else
-                // If the font is not CID 
+                // If the font is not CID
                 //Find the Subrs called by the glyph and insert to hash:
                 readASubr(Start, End, gBias, LBias, hSubr, lSubr, SubrsOffsets);
         }

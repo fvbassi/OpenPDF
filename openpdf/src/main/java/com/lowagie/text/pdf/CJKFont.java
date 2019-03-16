@@ -51,6 +51,7 @@ package com.lowagie.text.pdf;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -78,14 +79,10 @@ class CJKFont extends BaseFont {
 
     static Properties cjkFonts = new Properties();
     static Properties cjkEncodings = new Properties();
-<<<<<<< HEAD
+
     Map<String, char[]> allCMaps = new HashMap<>();
-    static Map<String, Map<String, Object>> allFonts = new ConcurrentHashMap<>(500, 0.85f, 64);
-=======
-    Hashtable<String, char[]> allCMaps = new Hashtable<>();
     static ConcurrentHashMap<String, HashMap<Object, Object>> allFonts = new ConcurrentHashMap<>(
             500, 0.85f, 64);
->>>>>>> refs/remotes/origin/master
     private static boolean propertiesLoaded = false;
     private static Object initLock = new Object();
 
@@ -683,26 +680,18 @@ class CJKFont extends BaseFont {
             Properties p = new Properties();
             p.load(is);
 
-            Map<String, Object> map = new HashMap<>();
-            for(Map.Entry<Object, Object> e : p.entrySet()) {
-            	map.put((String)e.getKey(), e.getValue());
-            }
-
             IntHashtable W = createMetric(p.getProperty("W"));
             p.remove("W");
-            map.put("W", W);
 
             IntHashtable W2 = createMetric(p.getProperty("W2"));
             p.remove("W2");
-<<<<<<< HEAD
-=======
-            HashMap<Object, Object> map = new HashMap<>();
-            for (Enumeration e = p.keys(); e.hasMoreElements();) {
-                Object obj = e.nextElement();
-                map.put(obj, p.getProperty((String) obj));
+
+            Map<String, Object> map = new HashMap<>();
+            for(Map.Entry<Object, Object> e : p.entrySet()) {
+                map.put((String)e.getKey(), e.getValue());
             }
+            
             map.put("W", W);
->>>>>>> refs/remotes/origin/master
             map.put("W2", W2);
 
             return map;

@@ -1316,24 +1316,11 @@ public class PdfDocument extends Document {
         Object[] currentValues = new Object[2];
         PdfFont currentFont = null;
         float displacement = 0;
-<<<<<<< HEAD
-        Float lastBaseFactor = new Float(0);
-=======
-        PdfLine l;
         Float lastBaseFactor = (float) 0;
->>>>>>> refs/remotes/origin/master
         currentValues[1] = lastBaseFactor;
 
         // looping over all the lines
-<<<<<<< HEAD
         for (PdfLine l : lines) {
-=======
-        for (PdfLine line1 : lines) {
-
-            // this is a line in the loop
-            l = line1;
-
->>>>>>> refs/remotes/origin/master
             float moveTextX = l.indentLeft() - indentLeft() + indentation.indentLeft + indentation.listIndentLeft + indentation.sectionIndentLeft;
             text.moveText(moveTextX, -l.height());
             // is the line preceded by a symbol?
@@ -1372,12 +1359,7 @@ public class PdfDocument extends Document {
      */
     void writeLineToContent(PdfLine line, PdfContentByte text, PdfContentByte graphics, Object[] currentValues, float ratio)  throws DocumentException {
         PdfFont currentFont = (PdfFont)(currentValues[0]);
-<<<<<<< HEAD
-        float lastBaseFactor = ((Float)(currentValues[1])).floatValue();
-=======
         float lastBaseFactor = (Float) (currentValues[1]);
-        PdfChunk chunk;
->>>>>>> refs/remotes/origin/master
         int numberOfSpaces;
         int lineLen;
         boolean isJustified;
@@ -2126,11 +2108,7 @@ public class PdfDocument extends Document {
      * Stores a list of document level JavaScript actions.
      */
     int jsCounter;
-<<<<<<< HEAD
     protected Map<String, PdfIndirectReference> documentLevelJS = new HashMap<>();
-=======
-    protected HashMap<String, PdfIndirectReference> documentLevelJS = new HashMap<>();
->>>>>>> refs/remotes/origin/master
     protected static final DecimalFormat SIXTEEN_DIGITS = new DecimalFormat("0000000000000000");
     void addJavaScript(PdfAction js) {
         if (js.get(PdfName.JS) == null)
@@ -2157,11 +2135,7 @@ public class PdfDocument extends Document {
         return documentLevelJS;
     }
 
-<<<<<<< HEAD
     protected Map<String, PdfIndirectReference> documentFileAttachment = new HashMap<>();
-=======
-    protected HashMap<String, PdfIndirectReference> documentFileAttachment = new HashMap<>();
->>>>>>> refs/remotes/origin/master
 
     void addFileAttachment(String description, PdfFileSpecification fs) throws IOException {
         if (description == null) {
@@ -2601,11 +2575,7 @@ public class PdfDocument extends Document {
                 i = c.rowspan();
             }
 
-<<<<<<< HEAD
-            i = i.intValue() - 1;
-=======
             i = i - 1;
->>>>>>> refs/remotes/origin/master
             rowspanMap.put(c, i);
 
             if (i < 1) {
@@ -2721,14 +2691,8 @@ public class PdfDocument extends Document {
             cells.clear();
             Set<PdfCell> opt = new HashSet<>();
 
-<<<<<<< HEAD
             for (List<PdfCell> row : rows) {
                 for (PdfCell cell : row) {
-=======
-                for (Object o : row) {
-                    cell = (PdfCell) o;
-
->>>>>>> refs/remotes/origin/master
                     if (!opt.contains(cell)) {
                         cells.add(cell);
                         opt.add(cell);
@@ -2814,17 +2778,8 @@ public class PdfDocument extends Document {
                         // we paint the borders of the cell
                         ctx.cellGraphics.rectangle(cell.rectangle(indentTop(), indentBottom()));
                         // we write the text of the cell
-<<<<<<< HEAD
                         for(Image image : cell.getImages(indentTop(), indentBottom())) {
-=======
-                        ArrayList images = cell.getImages(indentTop(), indentBottom());
-                        for (Object image1 : images) {
->>>>>>> refs/remotes/origin/master
                             cellsShown = true;
-<<<<<<< HEAD
-=======
-                            Image image = (Image) image1;
->>>>>>> refs/remotes/origin/master
                             graphics.addImage(image);
                         }
                         lines = cell.getLines(indentTop(), indentBottom());
@@ -2931,16 +2886,9 @@ public class PdfDocument extends Document {
         return mayBeRemoved;
     }
 
-<<<<<<< HEAD
     protected void consumeRowspan(Collection<PdfCell> row, RenderingContext ctx) {
         for(PdfCell cell : row) {
             ctx.consumeRowspan(cell);
-=======
-    protected void consumeRowspan(ArrayList row, RenderingContext ctx) {
-        for (Object o : row) {
-            PdfCell c = (PdfCell) o;
-            ctx.consumeRowspan(c);
->>>>>>> refs/remotes/origin/master
         }
     }
 
@@ -3053,13 +3001,7 @@ public class PdfDocument extends Document {
                 }
 
                 // and additional graphics
-<<<<<<< HEAD
                 for (Image image : cell.getImages(ctx.pagetop, indentBottom())) {
-=======
-                ArrayList images = cell.getImages(ctx.pagetop, indentBottom());
-                for (Object image1 : images) {
-                    Image image = (Image) image1;
->>>>>>> refs/remotes/origin/master
                     graphics.addImage(image);
                 }
             }

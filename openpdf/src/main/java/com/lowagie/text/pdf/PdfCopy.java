@@ -241,29 +241,17 @@ public class PdfCopy extends PdfWriter {
     PdfDictionary out = new PdfDictionary();
     PdfObject type = PdfReader.getPdfObjectRelease(in.get(PdfName.TYPE));
 
-<<<<<<< HEAD
     for (PdfName key : in.getKeys()) {
-      PdfObject value = in.get(key);
-      //        System.out.println("Copy " + key);
-      if (PdfName.PAGE.equals(type)) {
-        if (!key.equals(PdfName.B) && !key.equals(PdfName.PARENT)) {
-          out.put(key, copyObject(value));
+        PdfObject value = in.get(key);
+        //        System.out.println("Copy " + key);
+        if (PdfName.PAGE.equals(type)) {
+            if (!key.equals(PdfName.B) && !key.equals(PdfName.PARENT)) {
+                out.put(key, copyObject(value));
+            }
+        } else {
+            out.put(key, copyObject(value));
         }
-      } else {
-        out.put(key, copyObject(value));
-=======
-      for (PdfName key : in.getKeys()) {
-          PdfObject value = in.get(key);
-          //        System.out.println("Copy " + key);
-          if (PdfName.PAGE.equals(type)) {
-              if (!key.equals(PdfName.B) && !key.equals(PdfName.PARENT)) {
-                  out.put(key, copyObject(value));
-              }
-          } else {
-              out.put(key, copyObject(value));
-          }
->>>>>>> refs/remotes/origin/master
-      }
+    }
     return out;
   }
 
@@ -716,17 +704,11 @@ public class PdfCopy extends PdfWriter {
 
     private void expandFields(PdfFormField field, ArrayList<? super PdfFormField> allAnnots) {
       allAnnots.add(field);
-      ArrayList<PdfFormField> kids = field.getKids();
-      if (kids != null) {
-<<<<<<< HEAD
-        for (int k = 0; k < kids.size(); ++k) {
-          expandFields(kids.get(k), allAnnots);
-        }
-=======
-          for (Object kid : kids) {
-              expandFields((PdfFormField) kid, allAnnots);
+      ArrayList<PdfFormField> children = field.getKids();
+      if (children != null) {
+          for (PdfFormField c : children) {
+              expandFields(c, allAnnots);
           }
->>>>>>> refs/remotes/origin/master
       }
     }
 

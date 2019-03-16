@@ -50,10 +50,7 @@
 package com.lowagie.text.pdf.events;
 
 import java.util.ArrayList;
-<<<<<<< HEAD
 import java.util.List;
-=======
->>>>>>> refs/remotes/origin/master
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Paragraph;

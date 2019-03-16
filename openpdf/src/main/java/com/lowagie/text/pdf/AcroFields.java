@@ -2092,19 +2092,11 @@ public class AcroFields {
     if (sigNames != null) {
       return new ArrayList<>(sigNames.keySet());
     }
-<<<<<<< HEAD
 
     sigNames = new HashMap<>();
     ArrayList<Object[]> sorter = new ArrayList<>();
-    for (Map.Entry<String,Item> entry : fields.entrySet()) {
-      Item item = entry.getValue();
-=======
-    sigNames = new HashMap();
-    ArrayList sorter = new ArrayList();
-    for (Map.Entry<String, Item> stringItemEntry : fields.entrySet()) {
-      Map.Entry entry = stringItemEntry;
-      Item item = (Item) entry.getValue();
->>>>>>> refs/remotes/origin/master
+    for (Map.Entry<String, Item> entry : fields.entrySet()) {
+        Item item = entry.getValue();
       PdfDictionary merged = item.getMerged(0);
       if (!PdfName.SIG.equals(merged.get(PdfName.FT))) {
         continue;
@@ -2138,11 +2130,7 @@ public class AcroFields {
       int length = lengthOfSignedBlocks + unsignedBlock;
       sorter.add(new Object[]{entry.getKey(), new int[]{length, 0}});
     }
-<<<<<<< HEAD
     Collections.sort(sorter, SORTER_COMPARATOR);
-=======
-    sorter.sort(new SorterComparator());
->>>>>>> refs/remotes/origin/master
     if (!sorter.isEmpty()) {
       if (((int[]) sorter.get(sorter.size() - 1)[1])[0] == reader.getFileLength()) {
         totalRevisions = sorter.size();
@@ -2167,16 +2155,9 @@ public class AcroFields {
    */
   public ArrayList<String> getBlankSignatureNames() {
     getSignatureNames();
-<<<<<<< HEAD
     ArrayList<String> sigs = new ArrayList<>();
     for (Map.Entry<String,Item> entry : fields.entrySet()) {
       Item item = entry.getValue();
-=======
-    ArrayList sigs = new ArrayList();
-    for (Map.Entry<String, Item> stringItemEntry : fields.entrySet()) {
-      Map.Entry entry = stringItemEntry;
-      Item item = (Item) entry.getValue();
->>>>>>> refs/remotes/origin/master
       PdfDictionary merged = item.getMerged(0);
       if (!PdfName.SIG.equals(merged.getAsName(PdfName.FT))) {
         continue;
@@ -2552,12 +2533,10 @@ public class AcroFields {
     }
   }
 
-  private static Comparator<Object[]> SORTER_COMPARATOR = new Comparator<Object[]>() {
-    public int compare(Object[] o1, Object[] o2) {
+  private static Comparator<Object[]> SORTER_COMPARATOR = (o1, o2) -> {
       int n1 = ((int[]) o1[1])[0];
       int n2 = ((int[]) o2[1])[0];
       return n1 - n2;
-    }
   };
 
   /**

@@ -346,13 +346,8 @@ public class ColumnText {
     private void addWaitingPhrase() {
         if (bidiLine == null && waitPhrase != null) {
             bidiLine = new BidiLine();
-<<<<<<< HEAD
             for (Chunk chunk : waitPhrase.getChunks()) {
                 bidiLine.addChunk(new PdfChunk(chunk, null));
-=======
-            for (Object o : waitPhrase.getChunks()) {
-                bidiLine.addChunk(new PdfChunk((Chunk) o, null));
->>>>>>> refs/remotes/origin/master
             }
             waitPhrase = null;
         }

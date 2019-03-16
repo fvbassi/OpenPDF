@@ -467,11 +467,7 @@ class PdfCopyFieldsImp extends PdfWriter {
                     if (PdfName.SIG.equals(merged.get(PdfName.FT)))
                         hasSignature = true;
                     for (PdfName key : merged.getKeys()) {
-<<<<<<< HEAD
                         if (fieldKeys.contains(key))
-=======
-                        if (fieldKeys.containsKey(key))
->>>>>>> refs/remotes/origin/master
                             field.put(key, merged.get(key));
                     }
                     List<Object> list = new ArrayList<>();
@@ -510,19 +506,10 @@ class PdfCopyFieldsImp extends PdfWriter {
             }
         }
     }
-<<<<<<< HEAD
 
     void mergeWithMaster(Map<String,AcroFields.Item> fd) {
         for (Map.Entry<String,AcroFields.Item> entry : fd.entrySet()) {
             mergeField(entry.getKey(), entry.getValue());
-=======
-    
-    void mergeWithMaster(HashMap fd) {
-        for (Object o : fd.entrySet()) {
-            Map.Entry entry = (Map.Entry) o;
-            String name = (String) entry.getKey();
-            mergeField(name, (AcroFields.Item) entry.getValue());
->>>>>>> refs/remotes/origin/master
         }
     }
 

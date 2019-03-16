@@ -1124,13 +1124,8 @@ public class CFFFont {
                 seek(fonts[j].privateOffset);
                 while (getPosition() < fonts[j].privateOffset+fonts[j].privateLength) {
                     getDictItem();
-<<<<<<< HEAD
-                    if (key=="Subrs")
-                        //Add the private offset to the lsubrs since the offset is
-=======
                     if (Objects.equals(key, "Subrs"))
-                        //Add the private offset to the lsubrs since the offset is 
->>>>>>> refs/remotes/origin/master
+                        //Add the private offset to the lsubrs since the offset is
                         // relative to the beginning of the PrivateDict
                         fonts[j].privateSubrs = (Integer) args[0] +fonts[j].privateOffset;
                 }
