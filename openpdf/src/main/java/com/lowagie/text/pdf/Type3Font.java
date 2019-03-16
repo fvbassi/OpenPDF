@@ -129,7 +129,7 @@ public class Type3Font extends BaseFont {
         if (c == 0 || c > 255)
             throw new IllegalArgumentException(MessageLocalization.getComposedMessage("the.char.1.doesn.t.belong.in.this.type3.font", c));
         usedSlot[c] = true;
-        Integer ck = c;
+        Integer ck = (int) c;
         Type3Glyph glyph = char2glyph.get(ck);
         if (glyph != null)
             return glyph;

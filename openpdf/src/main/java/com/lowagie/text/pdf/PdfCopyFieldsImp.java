@@ -367,10 +367,10 @@ class PdfCopyFieldsImp extends PdfWriter {
      * Creates the new PDF by merging the fields and forms.
      */
     protected void closeIt() throws IOException {
-        for (PdfReader reader3 : readers) {
-            reader3.removeFields();
+        for (PdfReader reader : readers) {
+            reader.removeFields();
         }
-        for (PdfReader reader3 : readers) {
+        for (PdfReader reader : readers) {
             for (int page = 1; page <= reader.getNumberOfPages(); ++page) {
                 pageRefs.add(getNewReference(reader.getPageOrigRef(page)));
                 pageDics.add(reader.getPageN(page));

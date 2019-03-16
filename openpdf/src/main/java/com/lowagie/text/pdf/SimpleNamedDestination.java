@@ -75,7 +75,7 @@ public final class SimpleNamedDestination implements SimpleXMLDocHandler {
     private SimpleNamedDestination() {
     }
 
-    public static HashMap getNamedDestination(PdfReader reader, boolean fromNames) {
+    public static Map<String,PdfArray> getNamedDestination(PdfReader reader, boolean fromNames) {
         IntHashtable pages = new IntHashtable();
         int numPages = reader.getNumberOfPages();
         for (int k = 1; k <= numPages; ++k)

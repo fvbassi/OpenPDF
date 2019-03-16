@@ -387,10 +387,10 @@ class Type1Font extends BaseFont
                 isMetrics = false;
                 break;
             }
-            Integer C = -1;
-            Integer WX = 250;
-            String N = "";
-            int[] B = null;
+            int c = -1;
+            int wx = 250;
+            String n = "";
+            int[] b = null;
 
             tok = new StringTokenizer(line, ";");
             while (tok.hasMoreTokens())
@@ -401,26 +401,26 @@ class Type1Font extends BaseFont
                 ident = tokc.nextToken();
                 switch (ident) {
                     case "C":
-                        C = Integer.valueOf(tokc.nextToken());
+                        c = Integer.parseInt(tokc.nextToken());
                         break;
                     case "WX":
-                        WX = (int) Float.parseFloat(tokc.nextToken());
+                        wx = (int) Float.parseFloat(tokc.nextToken());
                         break;
                     case "N":
-                        N = tokc.nextToken();
+                        n = tokc.nextToken();
                         break;
                     case "B":
-                        B = new int[]{Integer.parseInt(tokc.nextToken()),
+                        b = new int[] { Integer.parseInt(tokc.nextToken()),
                                 Integer.parseInt(tokc.nextToken()),
                                 Integer.parseInt(tokc.nextToken()),
-                                Integer.parseInt(tokc.nextToken())};
+                                Integer.parseInt(tokc.nextToken()) };
                         break;
                 }
             }
-            Object[] metrics = new Object[]{C, WX, N, B};
-            if (C >= 0)
-                CharMetrics.put(C, metrics);
-            CharMetrics.put(N, metrics);
+            Object[] metrics = new Object[] { c, wx, n, b };
+            if (c >= 0)
+                charMetrics.put(c, metrics);
+            charMetrics.put(n, metrics);
         }
         if (isMetrics)
             throw new DocumentException(MessageLocalization.getComposedMessage("missing.endcharmetrics.in.1", fileName));

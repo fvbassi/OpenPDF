@@ -449,8 +449,7 @@ public class PdfLine {
     float[] getMaxSize() {
         float normal_leading = 0;
         float image_leading = -10000;
-        PdfChunk chunk;
-        for (PdfChunk o : chunks) {
+        for (PdfChunk chunk : chunks) {
             if (!chunk.isImage()) {
                 normal_leading = Math.max(chunk.font().size(), normal_leading);
             } else {

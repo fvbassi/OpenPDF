@@ -51,7 +51,6 @@ package com.lowagie.text.pdf;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -81,7 +80,7 @@ class CJKFont extends BaseFont {
     static Properties cjkEncodings = new Properties();
 
     Map<String, char[]> allCMaps = new HashMap<>();
-    static ConcurrentHashMap<String, HashMap<Object, Object>> allFonts = new ConcurrentHashMap<>(
+    static ConcurrentHashMap<String, Map<String, Object>> allFonts = new ConcurrentHashMap<>(
             500, 0.85f, 64);
     private static boolean propertiesLoaded = false;
     private static Object initLock = new Object();
@@ -690,7 +689,7 @@ class CJKFont extends BaseFont {
             for(Map.Entry<Object, Object> e : p.entrySet()) {
                 map.put((String)e.getKey(), e.getValue());
             }
-            
+
             map.put("W", W);
             map.put("W2", W2);
 

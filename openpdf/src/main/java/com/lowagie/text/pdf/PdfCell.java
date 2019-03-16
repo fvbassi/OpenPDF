@@ -780,7 +780,7 @@ public class PdfCell extends Rectangle {
             case Element.LISTITEM:
             case Element.PARAGRAPH:
                 for (Element e : ((ComposedElement<Element>) element).getChildren()) {
-                    processActions((Element) i.next(), action, allActions);
+                    processActions(e, action, allActions);
                 }
                 break;
             case Element.CHUNK:
@@ -788,7 +788,7 @@ public class PdfCell extends Rectangle {
                 break;
             case Element.LIST:
                 for (Element e : ((ComposedElement<Element>) element).getChildren()) {
-                    processActions((Element) i.next(), action, allActions);
+                    processActions(e, action, allActions);
                 }
                 break;
             default:
