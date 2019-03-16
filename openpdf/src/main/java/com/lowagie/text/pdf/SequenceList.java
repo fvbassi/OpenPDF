@@ -109,7 +109,7 @@ public class SequenceList {
     }
 
     protected int getType() {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int state = FIRST;
         while (true) {
             char c = nextChar();
@@ -272,8 +272,8 @@ public class SequenceList {
                     parse.low = parse.high;
                     parse.high = t;
                 }
-                for (Iterator<Integer> it = list.iterator(); it.hasNext();) {
-                    int n = it.next().intValue();
+                for (Iterator<Integer> it = list.listIterator(); it.hasNext();) {
+                    int n = it.next();
                     if (parse.even && (n & 1) == 1)
                         continue;
                     if (parse.odd && (n & 1) == 0)

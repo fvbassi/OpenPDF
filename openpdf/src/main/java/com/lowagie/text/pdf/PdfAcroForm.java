@@ -120,7 +120,7 @@ public class PdfAcroForm extends PdfDictionary {
         if (fieldTemplates.isEmpty()) return true;
         PdfDictionary dic = new PdfDictionary();
         for (PdfTemplate template : fieldTemplates.keySet()) {
-            PdfFormField.mergeResources(dic, (PdfDictionary)template.getResources());
+            PdfFormField.mergeResources(dic, (PdfDictionary) template.getResources());
         }
         put(PdfName.DR, dic);
         put(PdfName.DA, new PdfString("/Helv 0 Tf 0 g "));
@@ -568,9 +568,9 @@ public class PdfAcroForm extends PdfDictionary {
     public PdfFormField addSelectList(String name, String[] options, String defaultValue, BaseFont font, float fontSize, float llx, float lly, float urx, float ury) {
         PdfFormField choice = PdfFormField.createList(writer, options, 0);
         setChoiceParams(choice, name, defaultValue, llx, lly, urx, ury);
-        StringBuffer text = new StringBuffer();
-        for (int i = 0; i < options.length; i++) {
-            text.append(options[i]).append('\n');
+        StringBuilder text = new StringBuilder();
+        for (String option : options) {
+            text.append(option).append('\n');
         }
         drawMultiLineOfText(choice, text.toString(), font, fontSize, llx, lly, urx, ury);
         addFormField(choice);
@@ -592,9 +592,9 @@ public class PdfAcroForm extends PdfDictionary {
     public PdfFormField addSelectList(String name, String[][] options, String defaultValue, BaseFont font, float fontSize, float llx, float lly, float urx, float ury) {
         PdfFormField choice = PdfFormField.createList(writer, options, 0);
         setChoiceParams(choice, name, defaultValue, llx, lly, urx, ury);
-        StringBuffer text = new StringBuffer();
-        for (int i = 0; i < options.length; i++) {
-            text.append(options[i][1]).append('\n');
+        StringBuilder text = new StringBuilder();
+        for (String[] option : options) {
+            text.append(option[1]).append('\n');
         }
         drawMultiLineOfText(choice, text.toString(), font, fontSize, llx, lly, urx, ury);
         addFormField(choice);
@@ -642,9 +642,9 @@ public class PdfAcroForm extends PdfDictionary {
         PdfFormField choice = PdfFormField.createCombo(writer, editable, options, 0);
         setChoiceParams(choice, name, defaultValue, llx, lly, urx, ury);
         String value = null;
-        for (int i = 0; i < options.length; i++) {
-            if (options[i][0].equals(defaultValue)) {
-                value = options[i][1];
+        for (String[] option : options) {
+            if (option[0].equals(defaultValue)) {
+                value = option[1];
                 break;
             }
         }

@@ -49,7 +49,12 @@
 package com.lowagie.text;
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Collection;
+=======
+
+import com.lowagie.text.error_messages.MessageLocalization;
+>>>>>>> refs/remotes/origin/master
 
 import com.lowagie.text.error_messages.MessageLocalization;
 import com.lowagie.text.pdf.PdfContentByte;

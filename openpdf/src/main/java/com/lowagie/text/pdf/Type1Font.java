@@ -130,13 +130,13 @@ class Type1Font extends BaseFont
     private int ascender = 800;
 /** A variable.
  */
-    private int Descender = -200;
+    private int descender = -200;
 /** A variable.
  */
     private int stdHW;
 /** A variable.
  */
-    private int StdVW = 80;
+    private int stdVW = 80;
 
 /** Represents the section CharMetrics in the AFM file. Each
  *  value of this array contains a <CODE>Object[4]</CODE> with an
@@ -269,7 +269,7 @@ class Type1Font extends BaseFont
             metrics = charMetrics.get(name);
         }
         if (metrics != null)
-            return ((Integer)(metrics[1])).intValue();
+            return (Integer) (metrics[1]);
         return 0;
     }
 
@@ -293,7 +293,7 @@ class Type1Font extends BaseFont
             return 0;
         for (int k = 0; k < obj.length; k += 2) {
             if (second.equals(obj[k]))
-                return ((Integer)obj[k + 1]).intValue();
+                return (Integer) obj[k + 1];
         }
         return 0;
     }
@@ -308,55 +308,70 @@ class Type1Font extends BaseFont
     {
         String line;
         boolean isMetrics = false;
-        while ((line = rf.readLine()) != null)
-        {
+        label:
+        while ((line = rf.readLine()) != null) {
             StringTokenizer tok = new StringTokenizer(line, " ,\n\r\t\f");
             if (!tok.hasMoreTokens())
                 continue;
             String ident = tok.nextToken();
-            if (ident.equals("FontName"))
-                fontName = tok.nextToken("\u00ff").substring(1);
-            else if (ident.equals("FullName"))
-                fullName = tok.nextToken("\u00ff").substring(1);
-            else if (ident.equals("FamilyName"))
-                familyName = tok.nextToken("\u00ff").substring(1);
-            else if (ident.equals("Weight"))
-                weight = tok.nextToken("\u00ff").substring(1);
-            else if (ident.equals("ItalicAngle"))
-                italicAngle = Float.parseFloat(tok.nextToken());
-            else if (ident.equals("IsFixedPitch"))
-                isFixedPitch = tok.nextToken().equals("true");
-            else if (ident.equals("CharacterSet"))
-                characterSet = tok.nextToken("\u00ff").substring(1);
-            else if (ident.equals("FontBBox"))
-            {
-                llx = (int)Float.parseFloat(tok.nextToken());
-                lly = (int)Float.parseFloat(tok.nextToken());
-                urx = (int)Float.parseFloat(tok.nextToken());
-                ury = (int)Float.parseFloat(tok.nextToken());
-            }
-            else if (ident.equals("UnderlinePosition"))
-                underlinePosition = (int)Float.parseFloat(tok.nextToken());
-            else if (ident.equals("UnderlineThickness"))
-                underlineThickness = (int)Float.parseFloat(tok.nextToken());
-            else if (ident.equals("EncodingScheme"))
-                encodingScheme = tok.nextToken("\u00ff").substring(1);
-            else if (ident.equals("CapHeight"))
-                capHeight = (int)Float.parseFloat(tok.nextToken());
-            else if (ident.equals("XHeight"))
-                xHeight = (int)Float.parseFloat(tok.nextToken());
-            else if (ident.equals("Ascender"))
-                ascender = (int)Float.parseFloat(tok.nextToken());
-            else if (ident.equals("Descender"))
-                Descender = (int)Float.parseFloat(tok.nextToken());
-            else if (ident.equals("StdHW"))
-                stdHW = (int)Float.parseFloat(tok.nextToken());
-            else if (ident.equals("StdVW"))
-                StdVW = (int)Float.parseFloat(tok.nextToken());
-            else if (ident.equals("StartCharMetrics"))
-            {
-                isMetrics = true;
-                break;
+            switch (ident) {
+                case "FontName":
+                    fontName = tok.nextToken("\u00ff").substring(1);
+                    break;
+                case "FullName":
+                    fullName = tok.nextToken("\u00ff").substring(1);
+                    break;
+                case "FamilyName":
+                    familyName = tok.nextToken("\u00ff").substring(1);
+                    break;
+                case "Weight":
+                    weight = tok.nextToken("\u00ff").substring(1);
+                    break;
+                case "ItalicAngle":
+                    italicAngle = Float.parseFloat(tok.nextToken());
+                    break;
+                case "IsFixedPitch":
+                    isFixedPitch = tok.nextToken().equals("true");
+                    break;
+                case "CharacterSet":
+                    characterSet = tok.nextToken("\u00ff").substring(1);
+                    break;
+                case "FontBBox":
+                    llx = (int) Float.parseFloat(tok.nextToken());
+                    lly = (int) Float.parseFloat(tok.nextToken());
+                    urx = (int) Float.parseFloat(tok.nextToken());
+                    ury = (int) Float.parseFloat(tok.nextToken());
+                    break;
+                case "UnderlinePosition":
+                    underlinePosition = (int) Float.parseFloat(tok.nextToken());
+                    break;
+                case "UnderlineThickness":
+                    underlineThickness = (int) Float.parseFloat(tok.nextToken());
+                    break;
+                case "EncodingScheme":
+                    encodingScheme = tok.nextToken("\u00ff").substring(1);
+                    break;
+                case "CapHeight":
+                    capHeight = (int) Float.parseFloat(tok.nextToken());
+                    break;
+                case "XHeight":
+                    xHeight = (int) Float.parseFloat(tok.nextToken());
+                    break;
+                case "Ascender":
+                    ascender = (int) Float.parseFloat(tok.nextToken());
+                    break;
+                case "Descender":
+                    descender = (int) Float.parseFloat(tok.nextToken());
+                    break;
+                case "StdHW":
+                    stdHW = (int) Float.parseFloat(tok.nextToken());
+                    break;
+                case "StdVW":
+                    stdVW = (int) Float.parseFloat(tok.nextToken());
+                    break;
+                case "StartCharMetrics":
+                    isMetrics = true;
+                    break label;
             }
         }
         if (!isMetrics)
@@ -384,23 +399,28 @@ class Type1Font extends BaseFont
                 if (!tokc.hasMoreTokens())
                     continue;
                 ident = tokc.nextToken();
-                if (ident.equals("C"))
-                    C = Integer.parseInt(tokc.nextToken());
-                else if (ident.equals("WX"))
-                    WX = (int)Float.parseFloat(tokc.nextToken());
-                else if (ident.equals("N"))
-                    N = tokc.nextToken();
-                else if (ident.equals("B")) {
-                    B = new int[]{Integer.parseInt(tokc.nextToken()),
-                                         Integer.parseInt(tokc.nextToken()),
-                                         Integer.parseInt(tokc.nextToken()),
-                                         Integer.parseInt(tokc.nextToken())};
+                switch (ident) {
+                    case "C":
+                        C = Integer.valueOf(tokc.nextToken());
+                        break;
+                    case "WX":
+                        WX = (int) Float.parseFloat(tokc.nextToken());
+                        break;
+                    case "N":
+                        N = tokc.nextToken();
+                        break;
+                    case "B":
+                        B = new int[]{Integer.parseInt(tokc.nextToken()),
+                                Integer.parseInt(tokc.nextToken()),
+                                Integer.parseInt(tokc.nextToken()),
+                                Integer.parseInt(tokc.nextToken())};
+                        break;
                 }
             }
             Object[] metrics = new Object[]{C, WX, N, B};
-            if (C.intValue() >= 0)
-                charMetrics.put(C, metrics);
-            charMetrics.put(N, metrics);
+            if (C >= 0)
+                CharMetrics.put(C, metrics);
+            CharMetrics.put(N, metrics);
         }
         if (isMetrics)
             throw new DocumentException(MessageLocalization.getComposedMessage("missing.endcharmetrics.in.1", fileName));
@@ -435,7 +455,7 @@ class Type1Font extends BaseFont
             {
                 String first = tok.nextToken();
                 String second = tok.nextToken();
-                Integer width = (int)Float.parseFloat(tok.nextToken());
+                Integer width = (int) Float.parseFloat(tok.nextToken());
                 Object[] relates = kernPairs.get(first);
                 if (relates == null)
                     kernPairs.put(first, new Object[]{second, width});
@@ -518,11 +538,11 @@ class Type1Font extends BaseFont
         PdfDictionary dic = new PdfDictionary(PdfName.FONTDESCRIPTOR);
         dic.put(PdfName.ASCENT, new PdfNumber(ascender));
         dic.put(PdfName.CAPHEIGHT, new PdfNumber(capHeight));
-        dic.put(PdfName.DESCENT, new PdfNumber(Descender));
+        dic.put(PdfName.DESCENT, new PdfNumber(descender));
         dic.put(PdfName.FONTBBOX, new PdfRectangle(llx, lly, urx, ury));
         dic.put(PdfName.FONTNAME, new PdfName(fontName));
         dic.put(PdfName.ITALICANGLE, new PdfNumber(italicAngle));
-        dic.put(PdfName.STEMV, new PdfNumber(StdVW));
+        dic.put(PdfName.STEMV, new PdfNumber(stdVW));
         if (fontStream != null)
             dic.put(PdfName.FONTFILE, fontStream);
         int flags = 0;
@@ -531,7 +551,7 @@ class Type1Font extends BaseFont
         flags |= fontSpecific ? 4 : 32;
         if (italicAngle < 0)
             flags |= 64;
-        if (fontName.indexOf("Caps") >= 0 || fontName.endsWith("SC"))
+        if (fontName.contains("Caps") || fontName.endsWith("SC"))
             flags |= 131072;
         if (weight.equals("Bold"))
             flags |= 262144;
@@ -606,10 +626,10 @@ class Type1Font extends BaseFont
      * @throws DocumentException error in generating the object
      */
     void writeFont(PdfWriter writer, PdfIndirectReference ref, Object[] params) throws DocumentException, IOException {
-        int firstChar = ((Integer)params[0]).intValue();
-        int lastChar = ((Integer)params[1]).intValue();
+        int firstChar = (Integer) params[0];
+        int lastChar = (Integer) params[1];
         byte[] shortTag = (byte[]) params[2];
-        boolean subsetp = ((Boolean)params[3]).booleanValue() && subset;
+        boolean subsetp = (Boolean) params[3] && subset;
         if (!subsetp) {
             firstChar = 0;
             lastChar = shortTag.length - 1;
@@ -650,7 +670,7 @@ class Type1Font extends BaseFont
                 return capHeight * fontSize / 1000;
             case AWT_DESCENT:
             case DESCENT:
-                return Descender * fontSize / 1000;
+                return descender * fontSize / 1000;
             case ITALICANGLE:
                 return italicAngle;
             case BBOXLLX:

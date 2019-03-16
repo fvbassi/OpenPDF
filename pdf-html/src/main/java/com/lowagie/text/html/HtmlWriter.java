@@ -651,7 +651,7 @@ public class HtmlWriter extends DocWriter {
                 }
                 if (attributes != null && attributes.get(Chunk.SUBSUPSCRIPT) != null) {
                     // start sup or sub tag
-                    if (((Float)attributes.get(Chunk.SUBSUPSCRIPT)).floatValue() > 0) {
+                    if ((Float) attributes.get(Chunk.SUBSUPSCRIPT) > 0) {
                         writeStart(HtmlTags.SUP);
                     }
                     else {
@@ -665,7 +665,7 @@ public class HtmlWriter extends DocWriter {
                     // end sup or sub tag
                     os.write(LT);
                     os.write(FORWARD);
-                    if (((Float)attributes.get(Chunk.SUBSUPSCRIPT)).floatValue() > 0) {
+                    if ((Float) attributes.get(Chunk.SUBSUPSCRIPT) > 0) {
                         write(HtmlTags.SUP);
                     }
                     else {
@@ -1076,12 +1076,12 @@ public class HtmlWriter extends DocWriter {
             BaseFont bf = font.getBaseFont();
             if (bf != null) {
                 String ps = bf.getPostscriptFontName().toLowerCase();
-                if (ps.indexOf("bold") >= 0) {
+                if (ps.contains("bold")) {
                     if (fontstyle == Font.UNDEFINED)
                         fontstyle = 0;
                     fontstyle |= Font.BOLD;
                 }
-                if (ps.indexOf("italic") >= 0 || ps.indexOf("oblique") >= 0) {
+                if (ps.contains("italic") || ps.contains("oblique")) {
                     if (fontstyle == Font.UNDEFINED)
                         fontstyle = 0;
                     fontstyle |= Font.ITALIC;

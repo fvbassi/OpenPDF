@@ -305,7 +305,12 @@ public abstract class BaseFont {
     protected boolean fontSpecific = true;
 
     /** cache for the fonts already used. */
+<<<<<<< HEAD
     protected static ConcurrentHashMap<String, BaseFont> fontCache = new ConcurrentHashMap<>(500, 0.85f, 64);
+=======
+    protected static ConcurrentHashMap<String, BaseFont> fontCache = new ConcurrentHashMap<>(
+            500, 0.85f, 64);
+>>>>>>> refs/remotes/origin/master
 
     /** list of the 14 built in fonts. */
     protected static final HashMap<String, PdfName> BuiltinFonts14 = new HashMap<>();
@@ -1804,8 +1809,13 @@ public abstract class BaseFont {
         }
         PdfDictionary font = resources.getAsDict(PdfName.FONT);
         if (font != null) {
+<<<<<<< HEAD
             for (PdfName name : font.getKeys()) {
                 PdfObject ft = font.get(name);
+=======
+            for (PdfName pdfName : font.getKeys()) {
+                PdfObject ft = font.get(pdfName);
+>>>>>>> refs/remotes/origin/master
                 if (ft == null || !ft.isIndirect()) {
                     continue;
                 }
@@ -1818,8 +1828,14 @@ public abstract class BaseFont {
         }
         PdfDictionary xobj = resources.getAsDict(PdfName.XOBJECT);
         if (xobj != null) {
+<<<<<<< HEAD
             for (PdfName name : xobj.getKeys()) {
                 recourseFonts(xobj.getAsDict(name), hits, fonts, level);
+=======
+            for (PdfName pdfName : xobj.getKeys()) {
+                recourseFonts(xobj.getAsDict(pdfName), hits, fonts,
+                        level);
+>>>>>>> refs/remotes/origin/master
             }
         }
     }

@@ -308,7 +308,7 @@ public class PdfPageLabels {
             } else {
                 numberStyle = PdfPageLabels.EMPTY;
             }
-            formats[k] = new PdfPageLabelFormat(key.intValue() + 1, numberStyle, prefix, pagecount);
+            formats[k] = new PdfPageLabelFormat(key + 1, numberStyle, prefix, pagecount);
         }
         return formats;
     }

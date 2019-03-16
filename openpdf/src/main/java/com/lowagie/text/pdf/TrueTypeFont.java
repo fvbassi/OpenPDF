@@ -717,7 +717,7 @@ class TrueTypeFont extends BaseFont {
      * @throws IOException the font file could not be read
      */
     protected String readUnicodeString(int length) throws IOException {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         length /= 2;
         for (int k = 0; k < length; ++k) {
             buf.append(rf.readChar());
@@ -1172,8 +1172,7 @@ class TrueTypeFont extends BaseFont {
 
     protected static int[] compactRanges(ArrayList<int[]> ranges) {
         ArrayList<int[]> simp = new ArrayList<>();
-        for (int k = 0; k < ranges.size(); ++k) {
-            int[] r = ranges.get(k);
+        for (int[] r : ranges) {
             for (int j = 0; j < r.length; j += 2) {
                 simp.add(new int[]{Math.max(0, Math.min(r[j], r[j + 1])), Math.min(0xffff, Math.max(r[j], r[j + 1]))});
             }
@@ -1216,7 +1215,7 @@ class TrueTypeFont extends BaseFont {
                 Integer gi = v[0];
                 if (longTag.containsKey(gi))
                     continue;
-                int c = e.getKey().intValue();
+                int c = e.getKey();
                 boolean skip = true;
                 for (int k = 0; k < rg.length; k += 2) {
                     if (c >= rg[k] && c <= rg[k + 1]) {
@@ -1238,10 +1237,10 @@ class TrueTypeFont extends BaseFont {
      * @throws DocumentException error in generating the object
      */
     void writeFont(PdfWriter writer, PdfIndirectReference ref, Object[] params) throws DocumentException, IOException {
-        int firstChar = ((Integer)params[0]).intValue();
-        int lastChar = ((Integer)params[1]).intValue();
+        int firstChar = (Integer) params[0];
+        int lastChar = (Integer) params[1];
         byte[] shortTag = (byte[]) params[2];
-        boolean subsetp = ((Boolean)params[3]).booleanValue() && subset;
+        boolean subsetp = (Boolean) params[3] && subset;
 
         if (!subsetp) {
             firstChar = 0;

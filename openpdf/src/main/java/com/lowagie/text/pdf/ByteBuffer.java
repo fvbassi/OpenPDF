@@ -505,7 +505,7 @@ public class ByteBuffer extends OutputStream {
                 }
                 return null;
             } else {
-                StringBuffer res = new StringBuffer();
+                StringBuilder res = new StringBuilder();
                 if (negative) res.append('-');
                 if (v >= 1000000) {
                     res.append( chars[(v / 1000000)] );
@@ -533,7 +533,7 @@ public class ByteBuffer extends OutputStream {
                 return res.toString();
             }
         } else {
-            StringBuffer res = new StringBuffer();
+            StringBuilder res = new StringBuilder();
             if (negative) res.append('-');
             d += 0.5;
             long v = (long) d;

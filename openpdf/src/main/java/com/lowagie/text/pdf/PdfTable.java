@@ -145,7 +145,6 @@ public class PdfTable extends Rectangle {
         boolean groupChange;
         int firstDataRow = table.getLastHeaderRow() + 1;
         Cell cell;
-        PdfCell currentCell;
         int rows = table.size() + 1;
         float[] offsets = new float[rows];
         for (int i = 0; i < rows; i++) {
@@ -165,7 +164,7 @@ public class PdfTable extends Rectangle {
                 for(int i = 0; i < row.getColumns(); i++) {
                     cell = (Cell) row.getCell(i);
                     if (cell != null) {
-                        currentCell = new PdfCell(cell, rowNumber+prevRows, positions[i], positions[i + cell.getColspan()], offsets[rowNumber], cellspacing(), cellpadding());
+                      PdfCell currentCell = new PdfCell(cell, rowNumber+prevRows, positions[i], positions[i + cell.getColspan()], offsets[rowNumber], cellspacing(), cellpadding());
                         if (rowNumber < firstDataRow) {
                             currentCell.setHeader();
                             headercells.add(currentCell);
@@ -194,12 +193,10 @@ public class PdfTable extends Rectangle {
 
         // loop over all the cells
         int n = newCells.size();
-        for (int i = 0; i < n; i++) {
-            currentCell = newCells.get(i);
+        for (PdfCell currentCell : newCells) {
             try {
-                currentCell.setBottom(offsets[currentCell.rownumber()-prevRows + currentCell.rowspan()]);
-            }
-            catch(ArrayIndexOutOfBoundsException aioobe) {
+                currentCell.setBottom(offsets[currentCell.rownumber() - prevRows + currentCell.rowspan()]);
+            } catch (ArrayIndexOutOfBoundsException aioobe) {
                 currentCell.setBottom(offsets[rows - 1]);
             }
         }

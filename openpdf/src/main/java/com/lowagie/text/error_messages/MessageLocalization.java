@@ -214,27 +214,27 @@ public final class MessageLocalization {
     }
 
     private static Map<String,String> getLanguageMessages(String language, String country) throws IOException {
-        if (language == null)
-            throw new IllegalArgumentException("The language cannot be null.");
+      if (language == null)
+          throw new IllegalArgumentException("The language cannot be null.");
 
-        if (country != null) {
-            String file = language + "_" + country + ".lng";
-            try (
-                InputStream is = BaseFont.getResourceStream(BASE_PATH + file, new MessageLocalization().getClass().getClassLoader());
-            ) {
-                if (is != null) return readLanguageStream(is);
-            }
-        }
+      if (country != null) {
+          String file = language + "_" + country + ".lng";
+          try (
+              InputStream is = BaseFont.getResourceStream(BASE_PATH + file, new MessageLocalization().getClass().getClassLoader());
+          ) {
+              if (is != null) return readLanguageStream(is);
+          }
+      }
 
-        String file = language + ".lng";
-        try (
-            InputStream is = BaseFont.getResourceStream(BASE_PATH + file, new MessageLocalization().getClass().getClassLoader());
-        ) {
-            if (is != null) return readLanguageStream(is);
-        }
+      String file = language + ".lng";
+      try (
+          InputStream is = BaseFont.getResourceStream(BASE_PATH + file, new MessageLocalization().getClass().getClassLoader());
+      ) {
+          if (is != null) return readLanguageStream(is);
+      }
 
-        return null;
-    }
+      return null;
+  }
 
     private static Map<String,String> readLanguageStream(InputStream is) throws IOException {
         return readLanguageStream(new InputStreamReader(is, StandardCharsets.UTF_8));

@@ -50,6 +50,7 @@
 package com.lowagie.text.pdf;
 
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.lowagie.text.DocumentException;
@@ -100,8 +101,8 @@ class PdfCopyFormsImp extends PdfCopyFieldsImp {
      * of PdfCopyFields.
      */
     void mergeFields() {
-        for (int k = 0; k < fields.size(); ++k) {
-            Map<String, Item> fd = fields.get(k).getFields();
+        for (AcroFields field : fields) {
+            Map<String, Item> fd = field.getFields();
             mergeWithMaster(fd);
         }
     }

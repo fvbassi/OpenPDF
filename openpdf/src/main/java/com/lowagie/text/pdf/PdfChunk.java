@@ -171,9 +171,9 @@ public class PdfChunk {
             image = null;
         else {
             image = (Image)obj[0];
-            offsetX = ((Float)obj[1]).floatValue();
-            offsetY = ((Float)obj[2]).floatValue();
-            changeLeading = ((Boolean)obj[3]).booleanValue();
+            offsetX = (Float) obj[1];
+            offsetY = (Float) obj[2];
+            changeLeading = (Boolean) obj[3];
         }
         encoding = font.getFont().getEncoding();
         splitCharacter = (SplitCharacter)noStroke.get(Chunk.SPLITCHARACTER);
@@ -208,7 +208,7 @@ public class PdfChunk {
         else {
             // bold simulation
             if ((style & Font.BOLD) != 0)
-                attributes.put(Chunk.TEXTRENDERMODE, new Object[]{PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE, new Float(size / 30f), null});
+                attributes.put(Chunk.TEXTRENDERMODE, new Object[]{PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE, size / 30f, null});
             // italic simulation
             if ((style & Font.ITALIC) != 0)
                 attributes.put(Chunk.SKEW, new float[]{0, ITALIC_ANGLE});
@@ -221,8 +221,7 @@ public class PdfChunk {
                 String name = entry.getKey();
                 if (keysAttributes.containsKey(name)) {
                     attributes.put(name, entry.getValue());
-                }
-                else if (keysNoStroke.containsKey(name)) {
+                } else if (keysNoStroke.containsKey(name)) {
                     noStroke.put(name, entry.getValue());
                 }
             }
@@ -252,14 +251,14 @@ public class PdfChunk {
         else {
             attributes.remove(Chunk.HSCALE); // images are scaled in other ways
             image = (Image)obj[0];
-            offsetX = ((Float)obj[1]).floatValue();
-            offsetY = ((Float)obj[2]).floatValue();
-            changeLeading = ((Boolean)obj[3]).booleanValue();
+            offsetX = (Float) obj[1];
+            offsetY = (Float) obj[2];
+            changeLeading = (Boolean) obj[3];
         }
         font.setImage(image);
         Float hs = (Float)attributes.get(Chunk.HSCALE);
         if (hs != null)
-            font.setHorizontalScaling(hs.floatValue());
+            font.setHorizontalScaling(hs);
         encoding = font.getFont().getEncoding();
         splitCharacter = (SplitCharacter)noStroke.get(Chunk.SPLITCHARACTER);
         if (splitCharacter == null)
@@ -526,7 +525,7 @@ public class PdfChunk {
     float width() {
         if (isAttribute(Chunk.CHAR_SPACING)) {
             Float cs = (Float) getAttribute(Chunk.CHAR_SPACING);
-            return font.width(value) + value.length() * cs.floatValue();
+            return font.width(value) + value.length() * cs;
         }
         return font.width(value);
     }
@@ -568,7 +567,7 @@ public class PdfChunk {
     public float getTextRise() {
         Float f = (Float) getAttribute(Chunk.SUBSUPSCRIPT);
         if (f != null) {
-            return f.floatValue();
+            return f;
         }
         return 0.0f;
     }
@@ -667,7 +666,7 @@ public class PdfChunk {
     boolean isHorizontalSeparator() {
         if (isAttribute(Chunk.SEPARATOR)) {
             Object[] o = (Object[])getAttribute(Chunk.SEPARATOR);
-            return !((Boolean)o[1]).booleanValue();
+            return !(Boolean) o[1];
         }
         return false;
     }
@@ -689,7 +688,7 @@ public class PdfChunk {
     void adjustLeft(float newValue) {
         Object[] o = (Object[])attributes.get(Chunk.TAB);
         if (o != null) {
-            attributes.put(Chunk.TAB, new Object[]{o[0], o[1], o[2], new Float(newValue)});
+            attributes.put(Chunk.TAB, new Object[]{o[0], o[1], o[2], newValue});
         }
     }
 
@@ -840,7 +839,7 @@ public class PdfChunk {
             return 0;
         if (isAttribute(Chunk.CHAR_SPACING)) {
             Float cs = (Float) getAttribute(Chunk.CHAR_SPACING);
-            return font.width(c) + cs.floatValue();
+            return font.width(c) + cs;
         }
         return font.width(c);
     }

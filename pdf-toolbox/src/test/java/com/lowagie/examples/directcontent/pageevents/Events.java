@@ -1,15 +1,15 @@
 /*
  * $Id: Events.java 3373 2008-05-12 16:21:24Z xlv $
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
- * http://itextdocs.lowagie.com/tutorial/
+ * https://github.com/LibrePDF/OpenPDF/wiki/Tutorial
  *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 package com.lowagie.examples.directcontent.pageevents;
 
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.EmptyStackException;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.TreeSet;
 
 import javax.xml.parsers.SAXParser;
@@ -93,8 +94,7 @@ public class Events {
                         BaseFont.NOT_EMBEDDED);
                 cb = writer.getDirectContent();
                 template = cb.createTemplate(50, 50);
-            } catch (DocumentException de) {
-            } catch (IOException ioe) {
+            } catch (DocumentException | IOException de) {
             }
         }
 
@@ -105,7 +105,7 @@ public class Events {
          */
         public void onChapter(PdfWriter writer, Document document,
                 float paragraphPosition, Paragraph title) {
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             for (Chunk chunk : title.getChunks()) {
                 buf.append(chunk.getContent());
             }

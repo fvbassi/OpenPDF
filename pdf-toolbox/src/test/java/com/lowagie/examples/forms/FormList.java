@@ -1,15 +1,15 @@
 /*
  * $Id: FormList.java 4104 2009-11-23 18:28:22Z mstorer $
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
- * http://itextdocs.lowagie.com/tutorial/
+ * https://github.com/LibrePDF/OpenPDF/wiki/Tutorial
  *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 
 package com.lowagie.examples.forms;
@@ -60,19 +60,16 @@ public class FormList {
             fldDef.setOptions( TextField.MULTISELECT );
 
             List<Integer> selections = new ArrayList<>(3);
-            selections.add( 1 );
-            selections.add( 3 );
-            selections.add( 5 );
+            selections.add(1);
+            selections.add(3);
+            selections.add(5);
             fldDef.setChoiceSelections( selections ); // index into chioces
 
             PdfFormField field = fldDef.getListField();
             writer.addAnnotation( field );
         }
-        catch(DocumentException de) {
+        catch(DocumentException | IOException de) {
             System.err.println(de.getMessage());
-        }
-        catch(IOException ioe) {
-            System.err.println(ioe.getMessage());
         }
 
         // step 5: we close the document

@@ -278,10 +278,9 @@ public class Type3Font extends BaseFont {
         char[] cc = text.toCharArray();
         byte[] b = new byte[cc.length];
         int p = 0;
-        for (int k = 0; k < cc.length; ++k) {
-            char c = cc[k];
+        for (char c : cc) {
             if (charExists(c))
-                b[p++] = (byte)c;
+                b[p++] = (byte) c;
         }
         if (b.length == p)
             return b;
@@ -305,8 +304,7 @@ public class Type3Font extends BaseFont {
     public int getWidth(String text) {
         char[] c = text.toCharArray();
         int total = 0;
-        for (int k = 0; k < c.length; ++k)
-            total += getWidth(c[k]);
+        for (char c1 : c) total += getWidth(c1);
         return total;
     }
 

@@ -24,7 +24,6 @@ package com.lowagie.text;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.JarURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.CodeSource;
@@ -66,7 +65,7 @@ final class VersionBean {
             initialize();
         }
 
-        private static String getAttributeValueOrDefault(Attributes attributes, String name) {
+        private String getAttributeValueOrDefault(Attributes attributes, String name) {
             String value = attributes.getValue(name);
             if (value == null) {
                 value = UNKNOWN;
@@ -86,7 +85,7 @@ final class VersionBean {
             } catch (Exception e) {
             }
 
-
+            
         }
 
         private void initializePropertiesFromManifest(Manifest manifest) {
@@ -98,12 +97,12 @@ final class VersionBean {
             bundleVersion = getAttributeValueOrDefault(attributes, "Bundle-Version");
             implementationTitle = getAttributeValueOrDefault(attributes, "Implementation-Title");
             scmTimestamp = getAttributeValueOrDefault(attributes, "SCM-Timestamp");
-
+            
             if (isEmpty(implementationVersion) && !isEmpty(bundleVersion)) {
                 implementationVersion = bundleVersion;
             }
         }
-        private static boolean isEmpty(String value) {
+        private boolean isEmpty(String value) {
             return value == null || value.length() == 0;
         }
 
@@ -111,13 +110,14 @@ final class VersionBean {
             fullVersionString = MessageFormat.format("{0}", implementationVersion);
         }
 
-        private static Manifest readManifest() {
+        private Manifest readManifest() {
             ProtectionDomain domain = VersionBean.class.getProtectionDomain();
             if (domain != null) {
                 CodeSource codeSource = domain.getCodeSource();
                 if (codeSource != null) {
                     URL url = codeSource.getLocation();
                     if (url != null) {
+                        InputStream manifestStream = null;
                         try {
                             URL manifestFileUrl;
                             if ("vfs".equals(url.getProtocol())) {
@@ -126,16 +126,20 @@ final class VersionBean {
                             } else {
                                 manifestFileUrl = new URL(url, JarFile.MANIFEST_NAME);
                             }
+                            manifestStream = urlToStream(manifestFileUrl);
+                            return new Manifest(manifestStream);
+                        } catch (IOException e1) {
 
-                            try (
-                                InputStream is = urlToStream(manifestFileUrl);
-                            ) {
-                                return new Manifest(is);
+                        } finally {
+                            if (manifestStream != null) {
+                                try {
+                                    manifestStream.close();
+                                } catch (IOException e) {
+                                }
                             }
-                        } catch (MalformedURLException e1) {
-                        } catch (IOException e) {
                         }
 
+                        JarInputStream jis = null;
                         try {
                             URLConnection urlConnection = url.openConnection();
                             urlConnection.setUseCaches(false);
@@ -143,18 +147,23 @@ final class VersionBean {
                             if (urlConnection instanceof JarURLConnection) {
                                 JarURLConnection jarUrlConnection = (JarURLConnection) urlConnection;
                                 return jarUrlConnection.getManifest();
-                            }
-
-                            try (
-                                JarInputStream is = new JarInputStream(urlConnection.getInputStream());
-                            ) {
-                                return is.getManifest();
+                            } else {
+                                jis = new JarInputStream(urlConnection.getInputStream());
+                                return jis.getManifest();
                             }
                         } catch (IOException e) {
+                        } finally {
+                            if (jis != null) {
+                                try {
+                                    jis.close();
+                                } catch (IOException e) {
+                                }
+                            }
                         }
                     }
                 }
             }
+
             return null;
         }
 
@@ -167,17 +176,19 @@ final class VersionBean {
          * @throws IOException
          */
         private static InputStream urlToStream(URL url) throws IOException {
-            if (url == null) return null;
+            if (url != null) {
+                URLConnection connection = url.openConnection();
 
-            URLConnection connection = url.openConnection();
-            try {
-                connection.setUseCaches(false);
-            } catch (IllegalArgumentException e) {
+                try {
+                    connection.setUseCaches(false);
+                } catch (IllegalArgumentException e) {
+                }
+
+                return connection.getInputStream();
+            } else {
+                return null;
             }
-
-            return connection.getInputStream();
         }
-
         boolean containsDataFromManifest() {
             return containsDataFromManifest;
         }
@@ -204,9 +215,11 @@ final class VersionBean {
 
         @Override
         public String toString() {
-            if (this.containsDataFromManifest())
+            if (this.containsDataFromManifest()) {
                 return getImplementationTitle() + " by " + getImplementationVendor() + ", version " + getVersion();
-            return getVersion();
+            } else {
+                return getVersion();
+            }
         }
     }
 

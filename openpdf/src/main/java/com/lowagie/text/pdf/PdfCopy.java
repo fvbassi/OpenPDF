@@ -223,7 +223,7 @@ public class PdfCopy extends PdfWriter {
     PdfObject obj = PdfReader.getPdfObjectRelease(in);
     if (obj != null && obj.isDictionary()) {
       PdfObject type = PdfReader.getPdfObjectRelease(((PdfDictionary) obj).get(PdfName.TYPE));
-      if (type != null && PdfName.PAGE.equals(type)) {
+      if (PdfName.PAGE.equals(type)) {
         return theRef;
       }
     }
@@ -241,6 +241,7 @@ public class PdfCopy extends PdfWriter {
     PdfDictionary out = new PdfDictionary();
     PdfObject type = PdfReader.getPdfObjectRelease(in.get(PdfName.TYPE));
 
+<<<<<<< HEAD
     for (PdfName key : in.getKeys()) {
       PdfObject value = in.get(key);
       //        System.out.println("Copy " + key);
@@ -250,8 +251,19 @@ public class PdfCopy extends PdfWriter {
         }
       } else {
         out.put(key, copyObject(value));
+=======
+      for (PdfName key : in.getKeys()) {
+          PdfObject value = in.get(key);
+          //        System.out.println("Copy " + key);
+          if (PdfName.PAGE.equals(type)) {
+              if (!key.equals(PdfName.B) && !key.equals(PdfName.PARENT)) {
+                  out.put(key, copyObject(value));
+              }
+          } else {
+              out.put(key, copyObject(value));
+          }
+>>>>>>> refs/remotes/origin/master
       }
-    }
     return out;
   }
 
@@ -706,9 +718,15 @@ public class PdfCopy extends PdfWriter {
       allAnnots.add(field);
       ArrayList<PdfFormField> kids = field.getKids();
       if (kids != null) {
+<<<<<<< HEAD
         for (int k = 0; k < kids.size(); ++k) {
           expandFields(kids.get(k), allAnnots);
         }
+=======
+          for (Object kid : kids) {
+              expandFields((PdfFormField) kid, allAnnots);
+          }
+>>>>>>> refs/remotes/origin/master
       }
     }
 

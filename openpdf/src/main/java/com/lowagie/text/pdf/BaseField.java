@@ -296,10 +296,10 @@ public abstract class BaseField {
     protected static ArrayList<String> breakLines(ArrayList<String> breaks, BaseFont font, float fontSize, float width) {
         ArrayList<String> lines = new ArrayList<>();
         StringBuffer buf = new StringBuffer();
-        for (int ck = 0; ck < breaks.size(); ++ck) {
+        for (String aBreak : breaks) {
             buf.setLength(0);
             float w = 0;
-            char[] cs = breaks.get(ck).toCharArray();
+            char[] cs = aBreak.toCharArray();
             int len = cs.length;
             // 0 inline first, 1 inline, 2 spaces
             int state = 0;
@@ -325,8 +325,7 @@ public abstract class BaseField {
                                 state = 2;
                             else
                                 state = 1;
-                        }
-                        else {
+                        } else {
                             if (c != ' ')
                                 state = 1;
                         }
@@ -347,8 +346,7 @@ public abstract class BaseField {
                                 refk = k;
                                 lastspace = -1;
                                 state = 2;
-                            }
-                            else {
+                            } else {
                                 if (buf.length() > 1) {
                                     --k;
                                     buf.setLength(buf.length() - 1);

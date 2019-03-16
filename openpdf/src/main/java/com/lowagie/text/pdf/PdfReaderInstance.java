@@ -158,12 +158,12 @@ class PdfReaderInstance {
 
     void writeAllVisited() throws IOException {
         while (!nextRound.isEmpty()) {
-            ArrayList<Integer> vec = nextRound = new ArrayList<>();
-            for (int k = 0; k < vec.size(); ++k) {
-                Integer i = vec.get(k);
+          ArrayList<Integer> vec = nextRound;
+          nextRound = new ArrayList<>();
+            for (Integer i : vec) {
                 if (!visited.contains(i)) {
                     visited.add(i);
-                    int n = i.intValue();
+                    int n = i;
                     writer.addToBody(reader.getPdfObjectRelease(n), myXref[n]);
                 }
             }

@@ -334,14 +334,12 @@ public class FdfWriter {
                 Object v = entry.getValue();
                 PdfDictionary dic = new PdfDictionary();
                 dic.put(PdfName.T, new PdfString(key, PdfObject.TEXT_UNICODE));
-                if (v instanceof HashMap) {
-                    dic.put(PdfName.KIDS, calculate((Map<String,Object>)v));
-                }
-                else if(v instanceof PdfAction) {    // (plaflamme)
-                       dic.put(PdfName.A, (PdfAction)v);
-                }
-                else {
-                    dic.put(PdfName.V, (PdfObject)v);
+                if (v instanceof Map) {
+                    dic.put(PdfName.KIDS, calculate((HashMap) v));
+                } else if (v instanceof PdfAction) {    // (plaflamme)
+                    dic.put(PdfName.A, (PdfAction) v);
+                } else {
+                    dic.put(PdfName.V, (PdfObject) v);
                 }
                 ar.add(dic);
             }

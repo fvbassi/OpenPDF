@@ -373,7 +373,7 @@ public class HTMLWorker implements SimpleXMLDocHandler, DocListener {
                 cprops.addToChain(tag, h);
                 com.lowagie.text.List list = new com.lowagie.text.List(false);
                 try{
-                    list.setIndentationLeft(new Float(cprops.getProperty("indent")).floatValue());
+                    list.setIndentationLeft(new Float(cprops.getProperty("indent")));
                 }catch (Exception e) {
                     list.setAutoindent(true);
                 }
@@ -388,7 +388,7 @@ public class HTMLWorker implements SimpleXMLDocHandler, DocListener {
                 cprops.addToChain(tag, h);
                 com.lowagie.text.List list = new com.lowagie.text.List(true);
                 try{
-                    list.setIndentationLeft(new Float(cprops.getProperty("indent")).floatValue());
+                    list.setIndentationLeft(new Float(cprops.getProperty("indent")));
                 }catch (Exception e) {
                     list.setAutoindent(true);
                 }
@@ -476,8 +476,7 @@ public class HTMLWorker implements SimpleXMLDocHandler, DocListener {
                     if (href != null) {
                         ArrayList<Chunk> chunks = currentParagraph.getChunks();
                         int size = chunks.size();
-                        for (int k = 0; k < size; ++k) {
-                            Chunk ck = chunks.get(k);
+                        for (Chunk ck : chunks) {
                             ck.setAnchor(href);
                         }
                     }
@@ -639,7 +638,7 @@ public class HTMLWorker implements SimpleXMLDocHandler, DocListener {
             return;
         }
 
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int len = content.length();
         char character;
         boolean newline = false;

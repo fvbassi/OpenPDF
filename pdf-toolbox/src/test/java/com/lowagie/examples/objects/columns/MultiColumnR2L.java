@@ -1,15 +1,15 @@
 /*
  * $Id: MultiColumnR2L.java 3373 2008-05-12 16:21:24Z xlv $
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
- * http://itextdocs.lowagie.com/tutorial/
+ * https://github.com/LibrePDF/OpenPDF/wiki/Tutorial
  *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 package com.lowagie.examples.objects.columns;
 
@@ -66,9 +66,7 @@ public class MultiColumnR2L {
 
             document.add(mct);
             document.close();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
+        } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -123,7 +121,7 @@ public class MultiColumnR2L {
      */
     public static String poemLine()
     {
-       StringBuffer results = new StringBuffer(150);
+       StringBuilder results = new StringBuilder(150);
        results.append(randomWord(adjective));
        results.append(' ');
        results.append(randomWord(noun));

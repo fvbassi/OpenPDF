@@ -271,13 +271,12 @@ public class PdfDocument extends Document {
                 PdfDictionary names = new PdfDictionary();
                 if (!localDestinations.isEmpty()) {
                     PdfArray ar = new PdfArray();
-                    for (Iterator<Map.Entry<String, Object[]>> i = localDestinations.entrySet().iterator(); i.hasNext();) {
-                        Map.Entry<String, Object[]> entry = i.next();
+                    for (Map.Entry<String, Object[]> entry : localDestinations.entrySet()) {
                         String name = entry.getKey();
                         Object[] obj = entry.getValue();
                         if (obj[2] == null) //no destination
                             continue;
-                        PdfIndirectReference ref = (PdfIndirectReference)obj[1];
+                        PdfIndirectReference ref = (PdfIndirectReference) obj[1];
                         ar.add(new PdfString(name, null));
                         ar.add(ref);
                     }
@@ -971,12 +970,9 @@ public class PdfDocument extends Document {
             // we initialize the new page
             initPage();
         }
-        catch(DocumentException de) {
+        catch(DocumentException | IOException de) {
             // maybe this never happens, but it's better to check.
             throw new ExceptionConverter(de);
-        }
-        catch (IOException ioe) {
-            throw new ExceptionConverter(ioe);
         }
         return true;
     }
@@ -1320,11 +1316,24 @@ public class PdfDocument extends Document {
         Object[] currentValues = new Object[2];
         PdfFont currentFont = null;
         float displacement = 0;
+<<<<<<< HEAD
         Float lastBaseFactor = new Float(0);
+=======
+        PdfLine l;
+        Float lastBaseFactor = (float) 0;
+>>>>>>> refs/remotes/origin/master
         currentValues[1] = lastBaseFactor;
 
         // looping over all the lines
+<<<<<<< HEAD
         for (PdfLine l : lines) {
+=======
+        for (PdfLine line1 : lines) {
+
+            // this is a line in the loop
+            l = line1;
+
+>>>>>>> refs/remotes/origin/master
             float moveTextX = l.indentLeft() - indentLeft() + indentation.indentLeft + indentation.listIndentLeft + indentation.sectionIndentLeft;
             text.moveText(moveTextX, -l.height());
             // is the line preceded by a symbol?
@@ -1336,7 +1345,7 @@ public class PdfDocument extends Document {
 
             writeLineToContent(l, text, graphics, currentValues, writer.getSpaceCharRatio());
 
-            currentFont = (PdfFont)currentValues[0];
+            currentFont = (PdfFont) currentValues[0];
             displacement += l.height();
             text.moveText(-moveTextX, 0);
         }
@@ -1363,7 +1372,12 @@ public class PdfDocument extends Document {
      */
     void writeLineToContent(PdfLine line, PdfContentByte text, PdfContentByte graphics, Object[] currentValues, float ratio)  throws DocumentException {
         PdfFont currentFont = (PdfFont)(currentValues[0]);
+<<<<<<< HEAD
         float lastBaseFactor = ((Float)(currentValues[1])).floatValue();
+=======
+        float lastBaseFactor = (Float) (currentValues[1]);
+        PdfChunk chunk;
+>>>>>>> refs/remotes/origin/master
         int numberOfSpaces;
         int lineLen;
         boolean isJustified;
@@ -1443,7 +1457,7 @@ public class PdfDocument extends Document {
                         float fontSize = chunk.font().size();
                         float ascender = chunk.font().getFont().getFontDescriptor(BaseFont.ASCENT, fontSize);
                         float descender = chunk.font().getFont().getFontDescriptor(BaseFont.DESCENT, fontSize);
-                        if (vertical.booleanValue()) {
+                        if (vertical) {
                             di.draw(graphics, baseXMarker, yMarker + descender, baseXMarker + line.getOriginalWidth(), ascender - descender, yMarker);
                         }
                         else {
@@ -1453,7 +1467,7 @@ public class PdfDocument extends Document {
                     if (chunk.isTab()) {
                         Object[] tab = (Object[])chunk.getAttribute(Chunk.TAB);
                         DrawInterface di = (DrawInterface)tab[0];
-                        tabPosition = ((Float)tab[1]).floatValue() + ((Float)tab[3]).floatValue();
+                        tabPosition = (Float) tab[1] + (Float) tab[3];
                         float fontSize = chunk.font().size();
                         float ascender = chunk.font().getFont().getFontDescriptor(BaseFont.ASCENT, fontSize);
                         float descender = chunk.font().getFont().getFontDescriptor(BaseFont.DESCENT, fontSize);
@@ -1491,9 +1505,8 @@ public class PdfDocument extends Document {
                             subtract += hangingCorrection;
                         Object[][] unders = (Object[][]) chunk.getAttribute(Chunk.UNDERLINE);
                         Color scolor = null;
-                        for (int k = 0; k < unders.length; ++k) {
-                            Object[] obj = unders[k];
-                            scolor = (Color)obj[0];
+                        for (Object[] obj : unders) {
+                            scolor = (Color) obj[0];
                             float[] ps = (float[]) obj[1];
                             if (scolor == null)
                                 scolor = color;
@@ -1502,7 +1515,7 @@ public class PdfDocument extends Document {
                             float fsize = chunk.font().size();
                             graphics.setLineWidth(ps[0] + fsize * ps[1]);
                             float shift = ps[2] + fsize * ps[3];
-                            int cap2 = (int)ps[4];
+                            int cap2 = (int) ps[4];
                             if (cap2 != 0)
                                 graphics.setLineCap(cap2);
                             graphics.moveTo(xMarker, yMarker + shift);
@@ -1534,7 +1547,7 @@ public class PdfDocument extends Document {
                         if (obj[1] instanceof String)
                             remoteGoto(filename, (String)obj[1], xMarker, yMarker, xMarker + width - subtract, yMarker + chunk.font().size());
                         else
-                            remoteGoto(filename, ((Integer)obj[1]).intValue(), xMarker, yMarker, xMarker + width - subtract, yMarker + chunk.font().size());
+                            remoteGoto(filename, (Integer) obj[1], xMarker, yMarker, xMarker + width - subtract, yMarker + chunk.font().size());
                     }
                     if (chunk.isAttribute(Chunk.LOCALGOTO)) {
                         float subtract = lastBaseFactor;
@@ -1585,12 +1598,12 @@ public class PdfDocument extends Document {
                             c = params[1];
                         }
                         if (hs != null)
-                            hScale = hs.floatValue();
+                            hScale = hs;
                         text.setTextMatrix(hScale, b, c, 1, xMarker, yMarker);
                     }
                     if (chunk.isAttribute(Chunk.CHAR_SPACING)) {
                         Float cs = (Float) chunk.getAttribute(Chunk.CHAR_SPACING);
-                        text.setCharacterSpacing(cs.floatValue());
+                        text.setCharacterSpacing(cs);
                     }
                     if (chunk.isImage()) {
                         Image image = chunk.getImage();
@@ -1616,11 +1629,11 @@ public class PdfDocument extends Document {
             Color strokeColor = null;
             Float fr = (Float)chunk.getAttribute(Chunk.SUBSUPSCRIPT);
             if (textRender != null) {
-                tr = ((Integer)textRender[0]).intValue() & 3;
+                tr = (Integer) textRender[0] & 3;
                 if (tr != PdfContentByte.TEXT_RENDER_MODE_FILL)
                     text.setTextRenderingMode(tr);
                 if (tr == PdfContentByte.TEXT_RENDER_MODE_STROKE || tr == PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE) {
-                    strokeWidth = ((Float)textRender[1]).floatValue();
+                    strokeWidth = (Float) textRender[1];
                     if (strokeWidth != 1)
                         text.setLineWidth(strokeWidth);
                     strokeColor = (Color)textRender[2];
@@ -1631,7 +1644,7 @@ public class PdfDocument extends Document {
                 }
             }
             if (fr != null)
-                rise = fr.floatValue();
+                rise = fr;
             if (color != null)
                 text.setColorFill(color);
             if (rise != 0)
@@ -1711,7 +1724,7 @@ public class PdfDocument extends Document {
         if (adjustMatrix)
             text.moveText(baseXMarker - text.getXTLM(), 0);
         currentValues[0] = currentFont;
-        currentValues[1] = new Float(lastBaseFactor);
+        currentValues[1] = lastBaseFactor;
     }
 
     protected Indentation indentation = new Indentation();
@@ -1934,8 +1947,8 @@ public class PdfDocument extends Document {
             }
         }
         else {
-            for (int k = 0; k < kids.size(); ++k) {
-                traverseOutlineCount(kids.get(k));
+            for (PdfOutline kid : kids) {
+                traverseOutlineCount(kid);
             }
             if (parent != null) {
                 if (outline.isOpen()) {
@@ -1968,8 +1981,7 @@ public class PdfDocument extends Document {
             outline.put(PdfName.PARENT, outline.parent().indirectReference());
         java.util.List<PdfOutline> kids = outline.getKids();
         int size = kids.size();
-        for (int k = 0; k < size; ++k)
-            outlineTree(kids.get(k));
+        for (PdfOutline kid1 : kids) outlineTree(kid1);
         for (int k = 0; k < size; ++k) {
             if (k > 0)
                 kids.get(k).put(PdfName.PREV, kids.get(k - 1).indirectReference());
@@ -1980,8 +1992,7 @@ public class PdfDocument extends Document {
             outline.put(PdfName.FIRST, kids.get(0).indirectReference());
             outline.put(PdfName.LAST, kids.get(size - 1).indirectReference());
         }
-        for (int k = 0; k < size; ++k) {
-            PdfOutline kid = kids.get(k);
+        for (PdfOutline kid : kids) {
             writer.addToBody(kid, kid.indirectReference());
         }
     }
@@ -2115,7 +2126,11 @@ public class PdfDocument extends Document {
      * Stores a list of document level JavaScript actions.
      */
     int jsCounter;
+<<<<<<< HEAD
     protected Map<String, PdfIndirectReference> documentLevelJS = new HashMap<>();
+=======
+    protected HashMap<String, PdfIndirectReference> documentLevelJS = new HashMap<>();
+>>>>>>> refs/remotes/origin/master
     protected static final DecimalFormat SIXTEEN_DIGITS = new DecimalFormat("0000000000000000");
     void addJavaScript(PdfAction js) {
         if (js.get(PdfName.JS) == null)
@@ -2142,7 +2157,11 @@ public class PdfDocument extends Document {
         return documentLevelJS;
     }
 
+<<<<<<< HEAD
     protected Map<String, PdfIndirectReference> documentFileAttachment = new HashMap<>();
+=======
+    protected HashMap<String, PdfIndirectReference> documentFileAttachment = new HashMap<>();
+>>>>>>> refs/remotes/origin/master
 
     void addFileAttachment(String description, PdfFileSpecification fs) throws IOException {
         if (description == null) {
@@ -2582,13 +2601,17 @@ public class PdfDocument extends Document {
                 i = c.rowspan();
             }
 
+<<<<<<< HEAD
             i = i.intValue() - 1;
+=======
+            i = i - 1;
+>>>>>>> refs/remotes/origin/master
             rowspanMap.put(c, i);
 
-            if (i.intValue() < 1) {
+            if (i < 1) {
                 return 1;
             }
-            return i.intValue();
+            return i;
         }
 
         /**
@@ -2601,7 +2624,7 @@ public class PdfDocument extends Document {
             if (i == null) {
                 return c.rowspan();
             } else {
-                return i.intValue();
+                return i;
             }
         }
 
@@ -2698,8 +2721,14 @@ public class PdfDocument extends Document {
             cells.clear();
             Set<PdfCell> opt = new HashSet<>();
 
+<<<<<<< HEAD
             for (List<PdfCell> row : rows) {
                 for (PdfCell cell : row) {
+=======
+                for (Object o : row) {
+                    cell = (PdfCell) o;
+
+>>>>>>> refs/remotes/origin/master
                     if (!opt.contains(cell)) {
                         cells.add(cell);
                         opt.add(cell);
@@ -2785,8 +2814,17 @@ public class PdfDocument extends Document {
                         // we paint the borders of the cell
                         ctx.cellGraphics.rectangle(cell.rectangle(indentTop(), indentBottom()));
                         // we write the text of the cell
+<<<<<<< HEAD
                         for(Image image : cell.getImages(indentTop(), indentBottom())) {
+=======
+                        ArrayList images = cell.getImages(indentTop(), indentBottom());
+                        for (Object image1 : images) {
+>>>>>>> refs/remotes/origin/master
                             cellsShown = true;
+<<<<<<< HEAD
+=======
+                            Image image = (Image) image1;
+>>>>>>> refs/remotes/origin/master
                             graphics.addImage(image);
                         }
                         lines = cell.getLines(indentTop(), indentBottom());
@@ -2893,9 +2931,16 @@ public class PdfDocument extends Document {
         return mayBeRemoved;
     }
 
+<<<<<<< HEAD
     protected void consumeRowspan(Collection<PdfCell> row, RenderingContext ctx) {
         for(PdfCell cell : row) {
             ctx.consumeRowspan(cell);
+=======
+    protected void consumeRowspan(ArrayList row, RenderingContext ctx) {
+        for (Object o : row) {
+            PdfCell c = (PdfCell) o;
+            ctx.consumeRowspan(c);
+>>>>>>> refs/remotes/origin/master
         }
     }
 
@@ -3008,7 +3053,13 @@ public class PdfDocument extends Document {
                 }
 
                 // and additional graphics
+<<<<<<< HEAD
                 for (Image image : cell.getImages(ctx.pagetop, indentBottom())) {
+=======
+                ArrayList images = cell.getImages(ctx.pagetop, indentBottom());
+                for (Object image1 : images) {
+                    Image image = (Image) image1;
+>>>>>>> refs/remotes/origin/master
                     graphics.addImage(image);
                 }
             }

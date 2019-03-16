@@ -143,7 +143,7 @@ public class MarkedUpTextAssembler implements TextAssembler {
             // artifacts.
             return null;
         }
-        StringBuffer res = new StringBuffer();
+        StringBuilder res = new StringBuilder();
         if (_usePdfMarkupElements && !containingElementName.isEmpty()) {
             res.append('<').append(containingElementName).append('>');
         }
@@ -169,7 +169,7 @@ public class MarkedUpTextAssembler implements TextAssembler {
      * @return
      */
     private FinalText accumulate(Collection<TextAssemblyBuffer> textInfo) {
-        StringBuffer res = new StringBuffer();
+        StringBuilder res = new StringBuilder();
         for (TextAssemblyBuffer info : textInfo) {
             res.append(info.getText());
         }

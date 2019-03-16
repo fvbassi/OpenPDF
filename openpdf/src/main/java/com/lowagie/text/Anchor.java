@@ -215,24 +215,24 @@ public class Anchor extends Phrase {
      * @return    an <CODE>ArrayList</CODE>
      */
     public ArrayList<Chunk> getChunks() {
-        ArrayList<Chunk> tmp = new ArrayList<>();
-        boolean localDestination = (reference != null && reference.startsWith("#"));
-        boolean notGotoOK = true;
-        for(Element e : getChildren()) {
-            Chunk chunk = (Chunk) e;
-            if (name != null && notGotoOK && !chunk.isEmpty()) {
-                chunk.setLocalDestination(name);
-                notGotoOK = false;
-            }
-            if (localDestination) {
-                chunk.setLocalGoto(reference.substring(1));
-            }
-            else if (reference != null)
-                chunk.setAnchor(reference);
-            tmp.add(chunk);
-        }
-        return tmp;
-    }
+      ArrayList<Chunk> tmp = new ArrayList<>();
+      boolean localDestination = (reference != null && reference.startsWith("#"));
+      boolean notGotoOK = true;
+      for(Element e : getChildren()) {
+          Chunk chunk = (Chunk) e;
+          if (name != null && notGotoOK && !chunk.isEmpty()) {
+              chunk.setLocalDestination(name);
+              notGotoOK = false;
+          }
+          if (localDestination) {
+              chunk.setLocalGoto(reference.substring(1));
+          }
+          else if (reference != null)
+              chunk.setAnchor(reference);
+          tmp.add(chunk);
+      }
+      return tmp;
+  }
 
     /**
      * Gets the type of the text element.

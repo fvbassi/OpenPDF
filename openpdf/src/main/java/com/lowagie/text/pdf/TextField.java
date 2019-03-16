@@ -98,8 +98,7 @@ public class TextField extends BaseField {
         if (text == null || text.length() == 0)
             return false;
         char[] cc = text.toCharArray();
-        for (int k = 0; k < cc.length; ++k) {
-            int c = cc[k];
+        for (int c : cc) {
             if (c >= 0x590 && c < 0x0780)
                 return true;
         }
@@ -121,8 +120,8 @@ public class TextField extends BaseField {
             if (extensionFont != null)
                 fs.addFont(new Font(extensionFont, fontSize, 0, color));
             if (substitutionFonts != null) {
-                for(BaseFont font : substitutionFonts)
-                    fs.addFont(new Font(font, fontSize, 0, color));
+                for(BaseFont substitutionFont : substitutionFonts)
+                    fs.addFont(new Font(substitutionFont, fontSize, 0, color));
             }
             phrase = fs.process(text);
         }
@@ -139,7 +138,7 @@ public class TextField extends BaseField {
     public static String removeCRLF(String text) {
         if (text.indexOf('\n') >= 0 || text.indexOf('\r') >= 0) {
             char[] p = text.toCharArray();
-            StringBuffer sb = new StringBuffer(p.length);
+            StringBuilder sb = new StringBuilder(p.length);
             for (int k = 0; k < p.length; ++k) {
                 char c = p[k];
                 if (c == '\n')
@@ -364,8 +363,7 @@ public class TextField extends BaseField {
 
         // background boxes for selected value[s]
         app.setColorFill(new Color(10, 36, 106));
-        for (int curVal = 0; curVal < choiceSelections.size(); ++curVal) {
-            int curChoice = choiceSelections.get(curVal).intValue();
+        for (int curChoice : choiceSelections) {
             // only draw selections within our display range... not strictly necessary with
             // that clipping rect from above, but it certainly doesn't hurt either
             if (curChoice >= first && curChoice <= last) {
@@ -380,7 +378,7 @@ public class TextField extends BaseField {
             int rtl = checkRTL(ptext) ? PdfWriter.RUN_DIRECTION_LTR : PdfWriter.RUN_DIRECTION_NO_BIDI;
             ptext = removeCRLF(ptext);
             // highlight selected values against their (presumably) darker background
-            Color textCol = (choiceSelections.contains(  idx )) ? GrayColor.GRAYWHITE : fcolor;
+            Color textCol = (choiceSelections.contains(idx)) ? GrayColor.GRAYWHITE : fcolor;
             Phrase phrase = composePhrase(ptext, ufont, textCol, usize);
             ColumnText.showTextAligned(app, Element.ALIGN_LEFT, phrase, xp, yp, 0, rtl, 0);
         }
@@ -498,7 +496,7 @@ public class TextField extends BaseField {
 
         int topChoice = 0;
         if (choices != null) {
-            topChoice = firstValue.intValue();
+            topChoice = firstValue;
             topChoice = Math.min( topChoice, choices.length );
             topChoice = Math.max( 0, topChoice);
         } // else topChoice still 0
@@ -614,14 +612,13 @@ public class TextField extends BaseField {
     private void writeMultipleValues(PdfFormField field, String[][] mix) {
         PdfArray indexes = new PdfArray();
         PdfArray values = new PdfArray();
-        for (int i = 0; i < choiceSelections.size(); ++i) {
-            int idx = choiceSelections.get(i).intValue();
-            indexes.add( new PdfNumber( idx ) );
+        for (int idx : choiceSelections) {
+            indexes.add(new PdfNumber(idx));
 
             if (mix != null)
-                values.add( new PdfString( mix[idx][0] ) );
+                values.add(new PdfString(mix[idx][0]));
             else if (choices != null)
-                values.add( new PdfString( choices[ idx ] ) );
+                values.add(new PdfString(choices[idx]));
         }
 
         field.put( PdfName.V, values );
@@ -707,7 +704,7 @@ public class TextField extends BaseField {
      */
     public void addChoiceSelection(int selection) {
         if ((this.options & BaseField.MULTISELECT) != 0) {
-            choiceSelections.add(  selection  );
+            choiceSelections.add(selection);
         }
     }
 

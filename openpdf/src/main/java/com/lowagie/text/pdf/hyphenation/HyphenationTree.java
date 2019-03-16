@@ -90,7 +90,7 @@ public class HyphenationTree extends TernaryTree
     }
 
     protected String unpackValues(int k) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         byte v = vspace.get(k++);
         while (v != 0) {
             char c = (char)((v >>> 4) - 1 + '0');
@@ -148,7 +148,7 @@ public class HyphenationTree extends TernaryTree
     }
 
     protected byte[] getValues(int k) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         byte v = vspace.get(k++);
         while (v != 0) {
             char c = (char)((v >>> 4) - 1);
@@ -204,9 +204,9 @@ public class HyphenationTree extends TernaryTree
                 if (hstrcmp(word, i, kv.getArray(), lo[p]) == 0) {
                     values = getValues(eq[p]);    // data pointer is in eq[]
                     int j = index;
-                    for (int k = 0; k < values.length; k++) {
-                        if (j < il.length && values[k] > il[j]) {
-                            il[j] = values[k];
+                    for (byte value : values) {
+                        if (j < il.length && value > il[j]) {
+                            il[j] = value;
                         }
                         j++;
                     }
@@ -231,9 +231,9 @@ public class HyphenationTree extends TernaryTree
                     if (sc[q] == 0) {
                         values = getValues(eq[q]);
                         int j = index;
-                        for (int k = 0; k < values.length; k++) {
-                            if (j < il.length && values[k] > il[j]) {
-                                il[j] = values[k];
+                        for (byte value : values) {
+                            if (j < il.length && value > il[j]) {
+                                il[j] = value;
                             }
                             j++;
                         }

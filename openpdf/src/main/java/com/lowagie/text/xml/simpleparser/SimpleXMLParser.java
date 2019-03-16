@@ -565,7 +565,7 @@ public final class SimpleXMLParser {
 
         String decl = null;
         if (encoding.equals("UTF-8")) {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             int c;
             while ((c = in.read()) != -1) {
                 if (c == '>')

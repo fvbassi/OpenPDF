@@ -153,8 +153,7 @@ public class PdfAnnotationsImp {
         PdfArray array = new PdfArray();
         int rotation = pageSize.getRotation() % 360;
         int currentPage = writer.getCurrentPageNumber();
-        for (int k = 0; k < annotations.size(); ++k) {
-            PdfAnnotation dic = annotations.get(k);
+        for (PdfAnnotation dic : annotations) {
             int page = dic.getPlaceInPage();
             if (page > currentPage) {
                 delayedAnnotations.add(dic);
@@ -166,14 +165,14 @@ public class PdfAnnotationsImp {
                     if (templates != null)
                         acroForm.addFieldTemplates(templates);
                 }
-                PdfFormField field = (PdfFormField)dic;
+                PdfFormField field = (PdfFormField) dic;
                 if (field.getParent() == null)
                     acroForm.addDocumentField(field.getIndirectReference());
             }
             if (dic.isAnnotation()) {
                 array.add(dic.getIndirectReference());
                 if (!dic.isUsed()) {
-                    PdfRectangle rect = (PdfRectangle)dic.get(PdfName.RECT);
+                    PdfRectangle rect = (PdfRectangle) dic.get(PdfName.RECT);
                     if (rect != null) {
                         switch (rotation) {
                             case 90:
@@ -205,8 +204,7 @@ public class PdfAnnotationsImp {
                 dic.setUsed();
                 try {
                     writer.addToBody(dic, dic.getIndirectReference());
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     throw new ExceptionConverter(e);
                 }
             }
@@ -235,9 +233,9 @@ public class PdfAnnotationsImp {
                        fname, fs, mimetype, sparams[1]);
                return ann;
            case Annotation.FILE_PAGE:
-               return new PdfAnnotation(writer, annot.llx(), annot.lly(), annot.urx(), annot.ury(), new PdfAction((String) annot.attributes().get(Annotation.FILE), ((Integer) annot.attributes().get(Annotation.PAGE)).intValue()));
+               return new PdfAnnotation(writer, annot.llx(), annot.lly(), annot.urx(), annot.ury(), new PdfAction((String) annot.attributes().get(Annotation.FILE), (Integer) annot.attributes().get(Annotation.PAGE)));
            case Annotation.NAMED_DEST:
-               return new PdfAnnotation(writer, annot.llx(), annot.lly(), annot.urx(), annot.ury(), new PdfAction(((Integer) annot.attributes().get(Annotation.NAMED)).intValue()));
+               return new PdfAnnotation(writer, annot.llx(), annot.lly(), annot.urx(), annot.ury(), new PdfAction((Integer) annot.attributes().get(Annotation.NAMED)));
            case Annotation.LAUNCH:
                return new PdfAnnotation(writer, annot.llx(), annot.lly(), annot.urx(), annot.ury(), new PdfAction((String) annot.attributes().get(Annotation.APPLICATION),(String) annot.attributes().get(Annotation.PARAMETERS),(String) annot.attributes().get(Annotation.OPERATION),(String) annot.attributes().get(Annotation.DEFAULTDIR)));
            default:

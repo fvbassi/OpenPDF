@@ -79,10 +79,10 @@ public class XmpArray extends ArrayList<String> {
      * @return a String representation
      */
     public String toString() {
-        StringBuffer buf = new StringBuffer("<");
+        StringBuilder buf = new StringBuilder("<");
         buf.append(type);
         buf.append('>');
-        for(String s : this) {
+        for (String s : this) {
             buf.append("<rdf:li>");
             buf.append(XmpSchema.escape(s));
             buf.append("</rdf:li>");

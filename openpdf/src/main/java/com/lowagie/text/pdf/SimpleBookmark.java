@@ -176,7 +176,7 @@ public final class SimpleBookmark implements SimpleXMLDocHandler {
                                     map.put("NamedN", PdfName.decodeName(dest.toString()));
                                 else if (dest.isArray()) {
                                     PdfArray arr = (PdfArray)dest;
-                                    StringBuffer s = new StringBuffer();
+                                    StringBuilder s = new StringBuilder();
                                     s.append(arr.getPdfObject(0).toString());
                                     s.append(' ').append(arr.getPdfObject(1).toString());
                                     for (int k = 2; k < arr.size(); ++k)
@@ -243,7 +243,7 @@ public final class SimpleBookmark implements SimpleXMLDocHandler {
 
     private static String makeBookmarkParam(PdfArray dest, IntHashtable pages)
     {
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         PdfObject obj = dest.getPdfObject(0);
         if (obj.isNumber())
             s.append(((PdfNumber)obj).intValue() + 1);
@@ -361,7 +361,7 @@ public final class SimpleBookmark implements SimpleXMLDocHandler {
             return;
         for (Map<String,Object> map : list) {
             if ("GoTo".equals(map.get("Action"))) {
-                String page = (String)map.get("Page");
+                String page = (String) map.get("Page");
                 if (page != null) {
                     page = page.trim();
                     int idx = page.indexOf(' ');
@@ -391,9 +391,9 @@ public final class SimpleBookmark implements SimpleXMLDocHandler {
                     map.put("Page", page);
                 }
             }
-            List<Map<String,Object>> kids = (List<Map<String,Object>>)map.get("Kids");
-            if (kids != null)
-                shiftPageNumbers(kids, pageShift, pageRange);
+            List<Map<String,Object>> children = (List<Map<String,Object>>)map.get("Kids");
+            if (children != null)
+                shiftPageNumbers(children, pageShift, pageRange);
         }
     }
 
@@ -518,7 +518,7 @@ public final class SimpleBookmark implements SimpleXMLDocHandler {
             if (lower != null) {
                 outline.put(PdfName.FIRST, (PdfIndirectReference)lower[0]);
                 outline.put(PdfName.LAST, (PdfIndirectReference)lower[1]);
-                int n = ((Integer)lower[2]).intValue();
+                int n = (Integer) lower[2];
                 if ("false".equals(map.get("Open"))) {
                     outline.put(PdfName.COUNT, new PdfNumber(-n));
                 }
@@ -551,9 +551,9 @@ public final class SimpleBookmark implements SimpleXMLDocHandler {
             if (style != null) {
                 style = style.toLowerCase();
                 int bits = 0;
-                if (style.indexOf("italic") >= 0)
+                if (style.contains("italic"))
                     bits |= 1;
-                if (style.indexOf("bold") >= 0)
+                if (style.contains("bold"))
                     bits |= 2;
                 if (bits != 0)
                     outline.put(PdfName.F, new PdfNumber(bits));
@@ -582,7 +582,7 @@ public final class SimpleBookmark implements SimpleXMLDocHandler {
             String title = null;
             out.write(dep);
             out.write("<Title ");
-            List<Map<String,Object>> kids = null;
+            List<Map<String,Object>> children = null;
             for (Map.Entry<String,Object> entry : map.entrySet()) {
                 String key = entry.getKey();
                 if (key.equals("Title")) {
@@ -590,10 +590,9 @@ public final class SimpleBookmark implements SimpleXMLDocHandler {
                     continue;
                 }
                 else if (key.equals("Kids")) {
-                    kids = (List<Map<String,Object>>) entry.getValue();
+                    children = (List<Map<String,Object>>) entry.getValue();
                     continue;
-                }
-                else {
+                } else {
                     out.write(key);
                     out.write("=\"");
                     String value = (String) entry.getValue();
@@ -607,9 +606,9 @@ public final class SimpleBookmark implements SimpleXMLDocHandler {
             if (title == null)
                 title = "";
             out.write(XMLUtil.escapeXML(title, onlyASCII));
-            if (kids != null) {
+            if (children != null) {
                 out.write("\n");
-                exportToXMLNode(kids, out, indent + 1, onlyASCII);
+                exportToXMLNode(children, out, indent + 1, onlyASCII);
                 out.write(dep);
             }
             out.write("</Title>\n");

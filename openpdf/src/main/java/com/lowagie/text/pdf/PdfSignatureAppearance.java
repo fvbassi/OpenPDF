@@ -679,12 +679,12 @@ public class PdfSignatureAppearance {
         int cr = 0;
         int lf = 0;
         char[] t = text.toCharArray();
-        for (int k = 0; k < t.length; ++k) {
-          if (t[k] == '\n')
-            ++lf;
-          else if (t[k] == '\r')
-            ++cr;
-        }
+          for (char c : t) {
+              if (c == '\n')
+                  ++lf;
+              else if (c == '\r')
+                  ++cr;
+          }
         int minLines = Math.max(cr, lf) + 1;
         maxFontSize = Math.abs(rect.getHeight()) / minLines - 0.001f;
       }
@@ -1088,6 +1088,7 @@ public class PdfSignatureAppearance {
       PdfLiteral lit = new PdfLiteral(80);
       exclusionLocations.put(PdfName.BYTERANGE, lit);
       cryptoDictionary.put(PdfName.BYTERANGE, lit);
+<<<<<<< HEAD
       for (Map.Entry<PdfName,Integer> entry : exclusionSizes.entrySet()) {
         PdfName key = entry.getKey();
         Integer v = entry.getValue();
@@ -1095,6 +1096,16 @@ public class PdfSignatureAppearance {
         exclusionLocations.put(key, lit);
         cryptoDictionary.put(key, lit);
       }
+=======
+        for (Object o : exclusionSizes.entrySet()) {
+            Map.Entry entry = (Map.Entry) o;
+            PdfName key = (PdfName) entry.getKey();
+            Integer v = (Integer) entry.getValue();
+            lit = new PdfLiteral(v);
+            exclusionLocations.put(key, lit);
+            cryptoDictionary.put(key, lit);
+        }
+>>>>>>> refs/remotes/origin/master
       if (certificationLevel > 0)
         addDocMDP(cryptoDictionary);
       if (signatureEvent != null)
@@ -1113,11 +1124,20 @@ public class PdfSignatureAppearance {
     int byteRangePosition = exclusionLocations.get(PdfName.BYTERANGE).getPosition();
     exclusionLocations.remove(PdfName.BYTERANGE);
     int idx = 1;
+<<<<<<< HEAD
     for (PdfLiteral lit : exclusionLocations.values()) {
       int n = lit.getPosition();
       range[idx++] = n;
       range[idx++] = lit.getPosLength() + n;
     }
+=======
+      for (Object o : exclusionLocations.values()) {
+          PdfLiteral lit = (PdfLiteral) o;
+          int n = lit.getPosition();
+          range[idx++] = n;
+          range[idx++] = lit.getPosLength() + n;
+      }
+>>>>>>> refs/remotes/origin/master
     Arrays.sort(range, 1, range.length - 1);
     for (int k = 3; k < range.length - 2; k += 2)
       range[k] -= range[k - 1];
@@ -1126,6 +1146,7 @@ public class PdfSignatureAppearance {
       bout = sigout.getBuffer();
       boutLen = sigout.size();
       range[range.length - 1] = boutLen - range[range.length - 2];
+<<<<<<< HEAD
       try (
         ByteBuffer bf = new ByteBuffer();
       ) {
@@ -1135,12 +1156,20 @@ public class PdfSignatureAppearance {
           bf.append(']');
           System.arraycopy(bf.getBuffer(), 0, bout, byteRangePosition, bf.size());
       }
+=======
+      ByteBuffer bf = new ByteBuffer();
+      bf.append('[');
+        for (int i : range) bf.append(i).append(' ');
+      bf.append(']');
+      System.arraycopy(bf.getBuffer(), 0, bout, byteRangePosition, bf.size());
+>>>>>>> refs/remotes/origin/master
     } else {
       try (
         RandomAccessFile raf = new RandomAccessFile(tempFile, "rw");
       ) {
         int boutL = (int) raf.length();
         range[range.length - 1] = boutL - range[range.length - 2];
+<<<<<<< HEAD
         try (
           ByteBuffer bf = new ByteBuffer();
         ) {
@@ -1150,6 +1179,18 @@ public class PdfSignatureAppearance {
           bf.append(']');
           raf.seek(byteRangePosition);
           raf.write(bf.getBuffer(), 0, bf.size());
+=======
+        ByteBuffer bf = new ByteBuffer();
+        bf.append('[');
+          for (int i : range) bf.append(i).append(' ');
+        bf.append(']');
+        raf.seek(byteRangePosition);
+        raf.write(bf.getBuffer(), 0, bf.size());
+      } catch (IOException e) {
+        try {
+          raf.close();
+        } catch (Exception ee) {
+>>>>>>> refs/remotes/origin/master
         }
       // TODO Check: shall we ALWAYS delete the tempFile?
       } catch (IOException e) {
@@ -1183,6 +1224,7 @@ public class PdfSignatureAppearance {
         throw new DocumentException(
             MessageLocalization
                 .getComposedMessage("preclose.must.be.called.first"));
+<<<<<<< HEAD
       for (PdfName key : update.getKeys()) {
         PdfObject obj = update.get(key);
         PdfLiteral lit = exclusionLocations.get(key);
@@ -1205,9 +1247,31 @@ public class PdfSignatureAppearance {
             else {
               raf.seek(lit.getPosition());
               raf.write(bf.getBuffer(), 0, bf.size());
+=======
+      ByteBuffer bf = new ByteBuffer();
+        for (PdfName key : update.getKeys()) {
+            PdfObject obj = update.get(key);
+            PdfLiteral lit = (PdfLiteral) exclusionLocations.get(key);
+            if (lit == null)
+                throw new IllegalArgumentException(
+                        MessageLocalization.getComposedMessage(
+                                "the.key.1.didn.t.reserve.space.in.preclose", key.toString()));
+            bf.reset();
+            obj.toPdf(null, bf);
+            if (bf.size() > lit.getPosLength())
+                throw new IllegalArgumentException(
+                        MessageLocalization.getComposedMessage(
+                                "the.key.1.is.too.big.is.2.reserved.3", key.toString(),
+                                String.valueOf(bf.size()), String.valueOf(lit.getPosLength())));
+            if (tempFile == null)
+                System.arraycopy(bf.getBuffer(), 0, bout, lit.getPosition(),
+                        bf.size());
+            else {
+                raf.seek(lit.getPosition());
+                raf.write(bf.getBuffer(), 0, bf.size());
+>>>>>>> refs/remotes/origin/master
             }
         }
-      }
       if (update.size() != exclusionLocations.size())
         throw new IllegalArgumentException(
             MessageLocalization

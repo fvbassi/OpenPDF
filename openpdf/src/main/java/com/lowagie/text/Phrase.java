@@ -52,6 +52,8 @@ package com.lowagie.text;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.lowagie.text.error_messages.MessageLocalization;
+
 import com.lowagie.text.pdf.HyphenationEvent;
 
 /**
@@ -82,6 +84,7 @@ import com.lowagie.text.pdf.HyphenationEvent;
  */
 
 public class Phrase implements ComposedElement<Element>, TextElementArray {
+
     // constants
     private static final long serialVersionUID = 2643594602455068231L;
 
@@ -243,29 +246,35 @@ public class Phrase implements ComposedElement<Element>, TextElementArray {
      * @throws    ClassCastException    when you try to add something that isn't a <CODE>Chunk</CODE>, <CODE>Anchor</CODE> or <CODE>Phrase</CODE>
      */
     public void add(int index, Element element) {
-        if (element == null) return;
-        if (element.type() == Element.CHUNK) {
-            Chunk chunk = (Chunk) element;
-            if (!font.isStandardFont()) {
-                chunk.setFont(font.difference(chunk.getFont()));
-            }
-            if (hyphenation != null && chunk.getHyphenation() == null && !chunk.isEmpty()) {
-                chunk.setHyphenation(hyphenation);
-            }
-            elements.add(index, chunk);
-        }
-        else if (element.type() == Element.PHRASE ||
-        element.type() == Element.ANCHOR ||
-        element.type() == Element.ANNOTATION ||
-        element.type() == Element.TABLE || // line added by David Freels
-        element.type() == Element.YMARK ||
-        element.type() == Element.MARKED) {
-            elements.add(index, element);
-        }
-        else {
-            throw new ClassCastException(String.valueOf(element.type()));
-        }
-    }
+      if (element == null) return;
+      try {
+          if (element.type() == Element.CHUNK) {
+              Chunk chunk = (Chunk) element;
+              if (!font.isStandardFont()) {
+                  chunk.setFont(font.difference(chunk.getFont()));
+              }
+              if (hyphenation != null && chunk.getHyphenation() == null && !chunk.isEmpty()) {
+                  chunk.setHyphenation(hyphenation);
+              }
+              elements.add(index, chunk);
+          }
+          else if (element.type() == Element.PHRASE ||
+          element.type() == Element.ANCHOR ||
+          element.type() == Element.ANNOTATION ||
+          element.type() == Element.TABLE || // line added by David Freels
+          element.type() == Element.YMARK ||
+          element.type() == Element.MARKED) {
+          	elements.add(index, element);
+          }
+          else {
+              throw new ClassCastException(String.valueOf(element.type()));
+          }
+      }
+      catch(ClassCastException cce) {
+          throw new ClassCastException(MessageLocalization.getComposedMessage("insertion.of.illegal.element.1", cce.getMessage()));
+      }
+  }
+
 
     /**
      * Adds a <CODE>Chunk</CODE>, <CODE>Anchor</CODE> or another <CODE>Phrase</CODE>
@@ -277,10 +286,46 @@ public class Phrase implements ComposedElement<Element>, TextElementArray {
      */
     public boolean add(Object o) {
         if (o == null) return false;
-        if (o instanceof String) return add((String) o);
-        if (o instanceof RtfElementInterface) { ((ArrayList)elements).add(o); return true; } // TODO: Check: weird types
-        if (o instanceof Element) return add((Element) o);
-        throw new ClassCastException(o.getClass().getName());
+        if (o instanceof String) {
+            return elements.add(new Chunk((String) o, font));
+        }
+        if (o instanceof RtfElementInterface) {
+            return elements.add(o);
+        }
+        try {
+            Element element = (Element) o;
+            switch(element.type()) {
+                case Element.CHUNK:
+                    return addChunk((Chunk) o);
+                case Element.PHRASE:
+                case Element.PARAGRAPH:
+                    Phrase phrase = (Phrase) o;
+                    boolean success = true;
+                    for (Element e : phrase.elements) {
+                        if (e instanceof Chunk) {
+                            success &= addChunk((Chunk) e);
+                        } else {
+                            success &= this.add(e);
+                        }
+                    }
+                    return success;
+                case Element.MARKED:
+                case Element.ANCHOR:
+                case Element.ANNOTATION:
+                case Element.FOOTNOTE:
+                case Element.TABLE: // case added by David Freels
+                case Element.PTABLE: // case added by mr. Karen Vardanyan
+                    // This will only work for PDF!!! Not for RTF/HTML
+                case Element.LIST:
+                case Element.YMARK:
+                    return elements.add(o);
+                    default:
+                        throw new ClassCastException(String.valueOf(element.type()));
+            }
+        }
+        catch(ClassCastException cce) {
+            throw new ClassCastException(MessageLocalization.getComposedMessage("insertion.of.illegal.element.1", cce.getMessage()));
+        }
     }
 
     /**
@@ -301,6 +346,7 @@ public class Phrase implements ComposedElement<Element>, TextElementArray {
      * @return    a boolean
      * @throws    ClassCastException    when you try to add something that isn't a <CODE>Chunk</CODE>, <CODE>Anchor</CODE> or <CODE>Phrase</CODE>
      */
+<<<<<<< HEAD
     public boolean add(Element element) {
         if (element == null) return false;
 
@@ -332,6 +378,11 @@ public class Phrase implements ComposedElement<Element>, TextElementArray {
                 return elements.add(element);
             default:
                 throw new ClassCastException(String.valueOf(element.type()));
+=======
+    public boolean addAll(Collection collection) {
+        for (Object o : collection) {
+            this.add(o);
+>>>>>>> refs/remotes/origin/master
         }
     }
 
@@ -438,9 +489,15 @@ public class Phrase implements ComposedElement<Element>, TextElementArray {
      * This method differs from toString because toString will return an ArrayList with the toString value of the Chunks in this Phrase.
      */
     public String getContent() {
+<<<<<<< HEAD
         StringBuffer buf = new StringBuffer();
         for (Chunk c : getChunks()) {
             buf.append(c.toString());
+=======
+        StringBuilder buf = new StringBuilder();
+        for (Object o : getChunks()) {
+            buf.append(o.toString());
+>>>>>>> refs/remotes/origin/master
         }
         return buf.toString();
     }
@@ -530,7 +587,7 @@ public class Phrase implements ComposedElement<Element>, TextElementArray {
                     string = string.substring(index);
                 }
                 Font symbol = new Font(Font.SYMBOL, font.getSize(), font.getStyle(), font.getColor());
-                StringBuffer buf = new StringBuffer();
+                StringBuilder buf = new StringBuilder();
                 buf.append(SpecialSymbol.getCorrespondingSymbol(string.charAt(0)));
                 string = string.substring(1);
                 while (SpecialSymbol.index(string) == 0) {

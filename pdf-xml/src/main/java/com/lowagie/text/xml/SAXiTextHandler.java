@@ -86,6 +86,14 @@ import com.lowagie.text.factories.ElementFactory;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.draw.LineSeparator;
 import com.lowagie.text.xml.simpleparser.EntitiesToSymbol;
+<<<<<<< HEAD
+=======
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
+
+import java.lang.reflect.Field;
+import java.util.*;
+>>>>>>> refs/remotes/origin/master
 
 /**
  * This class is a Handler that controls the iText XML to PDF conversion.
@@ -511,24 +519,24 @@ public class SAXiTextHandler extends DefaultHandler {
                 || current instanceof Cell) {
             ((TextElementArray) current).add(img);
             stack.push(current);
-            return;
         }
         // ...if not, we need to to a lot of stuff
-
-        Stack<Element> newStack = new Stack<>();
-        while (!(current instanceof Chapter
-                || current instanceof Section || current instanceof Cell)) {
-            newStack.push(current);
-            if (current instanceof Anchor) {
-                img.setAnnotation(new Annotation(0, 0, 0,
-                        0, ((Anchor) current).getReference()));
+        else {
+            Stack<Element> newStack = new Stack<>();
+            while (!(current instanceof Chapter
+                    || current instanceof Section || current instanceof Cell)) {
+                newStack.push(current);
+                if (current instanceof Anchor) {
+                    img.setAnnotation(new Annotation(0, 0, 0,
+                            0, ((Anchor) current).getReference()));
+                }
+                current = stack.pop();
             }
-            current = stack.pop();
-        }
-        ((TextElementArray) current).add(img);
-        stack.push(current);
-        while (!newStack.empty()) {
-            stack.push(newStack.pop());
+            ((TextElementArray) current).add(img);
+            stack.push(current);
+            while (!newStack.empty()) {
+                stack.push(newStack.pop());
+            }
         }
     }
 
@@ -570,7 +578,7 @@ public class SAXiTextHandler extends DefaultHandler {
             return;
         }
 
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         int len = content.length();
         char character;
         boolean newline = false;
@@ -750,7 +758,7 @@ public class SAXiTextHandler extends DefaultHandler {
                     cellWidths[i] = 0;
                     cellNulls[i] = true;
                 }
-                float total = 0;
+                float total = 0f;
                 int j = 0;
                 for (Cell cell : cells) {
                     String width = cell.getWidthAsString();

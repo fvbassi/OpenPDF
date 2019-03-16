@@ -404,8 +404,8 @@ public class MetaDo {
                     cx = pt[0];
                     cy = pt[1];
                     cb.moveTo(cx, cy);
-                    for (int k = 0; k < ar.size(); ++k) {
-                        pt = ar.get(k);
+                    for (float[] floats : ar) {
+                        pt = floats;
                         cb.curveTo(pt[2], pt[3], pt[4], pt[5], pt[6], pt[7]);
                     }
                     cb.lineTo(cx, cy);

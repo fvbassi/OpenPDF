@@ -78,8 +78,14 @@ class CJKFont extends BaseFont {
 
     static Properties cjkFonts = new Properties();
     static Properties cjkEncodings = new Properties();
+<<<<<<< HEAD
     Map<String, char[]> allCMaps = new HashMap<>();
     static Map<String, Map<String, Object>> allFonts = new ConcurrentHashMap<>(500, 0.85f, 64);
+=======
+    Hashtable<String, char[]> allCMaps = new Hashtable<>();
+    static ConcurrentHashMap<String, HashMap<Object, Object>> allFonts = new ConcurrentHashMap<>(
+            500, 0.85f, 64);
+>>>>>>> refs/remotes/origin/master
     private static boolean propertiesLoaded = false;
     private static Object initLock = new Object();
 
@@ -225,8 +231,7 @@ class CJKFont extends BaseFont {
         loadProperties();
         String encodings = cjkFonts.getProperty(fontName);
         return encodings != null
-                && (enc.equals("Identity-H") || enc.equals("Identity-V") || encodings
-                        .indexOf("_" + enc + "_") >= 0);
+                && (enc.equals("Identity-H") || enc.equals("Identity-V") || encodings.contains("_" + enc + "_"));
     }
 
     /**
@@ -533,7 +538,7 @@ class CJKFont extends BaseFont {
         if (lastValue == 0) {
             return null;
         }
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append('[');
         buf.append(lastCid);
         int state = FIRST;
@@ -622,7 +627,7 @@ class CJKFont extends BaseFont {
         if (lastHValue == 0) {
             lastHValue = 1000;
         }
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append('[');
         buf.append(lastCid);
         int state = FIRST;
@@ -689,6 +694,15 @@ class CJKFont extends BaseFont {
 
             IntHashtable W2 = createMetric(p.getProperty("W2"));
             p.remove("W2");
+<<<<<<< HEAD
+=======
+            HashMap<Object, Object> map = new HashMap<>();
+            for (Enumeration e = p.keys(); e.hasMoreElements();) {
+                Object obj = e.nextElement();
+                map.put(obj, p.getProperty((String) obj));
+            }
+            map.put("W", W);
+>>>>>>> refs/remotes/origin/master
             map.put("W2", W2);
 
             return map;

@@ -61,6 +61,11 @@ import com.lowagie.text.pdf.PdfObject;
 import com.lowagie.text.pdf.PdfString;
 import com.lowagie.text.pdf.PdfWriter;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.Map;
+
 /**
  * With this class you can create an Xmp Stream that can be used for adding
  * Metadata to a PDF Dictionary. Remark that this class doesn't cover the
@@ -151,29 +156,29 @@ public class XmpWriter {
                 if (obj == null)
                     continue;
                 if (PdfName.TITLE.equals(key)) {
-                    dc.addTitle(((PdfString)obj).toUnicodeString());
+                    dc.addTitle(((PdfString) obj).toUnicodeString());
                 }
                 if (PdfName.AUTHOR.equals(key)) {
-                    dc.addAuthor(((PdfString)obj).toUnicodeString());
+                    dc.addAuthor(((PdfString) obj).toUnicodeString());
                 }
                 if (PdfName.SUBJECT.equals(key)) {
-                    dc.addSubject(((PdfString)obj).toUnicodeString());
-                    dc.addDescription(((PdfString)obj).toUnicodeString());
+                    dc.addSubject(((PdfString) obj).toUnicodeString());
+                    dc.addDescription(((PdfString) obj).toUnicodeString());
                 }
                 if (PdfName.KEYWORDS.equals(key)) {
-                    p.addKeywords(((PdfString)obj).toUnicodeString());
+                    p.addKeywords(((PdfString) obj).toUnicodeString());
                 }
                 if (PdfName.CREATOR.equals(key)) {
-                    basic.addCreatorTool(((PdfString)obj).toUnicodeString());
+                    basic.addCreatorTool(((PdfString) obj).toUnicodeString());
                 }
                 if (PdfName.PRODUCER.equals(key)) {
-                    p.addProducer(((PdfString)obj).toUnicodeString());
+                    p.addProducer(((PdfString) obj).toUnicodeString());
                 }
                 if (PdfName.CREATIONDATE.equals(key)) {
-                    basic.addCreateDate(((PdfDate)obj).getW3CDate());
+                    basic.addCreateDate(((PdfDate) obj).getW3CDate());
                 }
                 if (PdfName.MODDATE.equals(key)) {
-                    basic.addModDate(((PdfDate)obj).getW3CDate());
+                    basic.addModDate(((PdfDate) obj).getW3CDate());
                 }
             }
             if (dc.size() > 0) addRdfDescription(dc);

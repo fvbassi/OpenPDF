@@ -157,8 +157,8 @@ public class PdfLine {
         //            alignment = Element.ALIGN_LEFT;
         if (chunk.isTab()) {
             Object[] tab = (Object[])chunk.getAttribute(Chunk.TAB);
-            float tabPosition = ((Float)tab[1]).floatValue();
-            boolean newline = ((Boolean)tab[2]).booleanValue();
+            float tabPosition = (Float) tab[1];
+            boolean newline = (Boolean) tab[2];
             if (newline && tabPosition < originalWidth - width) {
                 return chunk;
             }
@@ -360,7 +360,7 @@ public class PdfLine {
      * @return    a <CODE>String</CODE>
      */
     public String toString() {
-        StringBuffer tmp = new StringBuffer();
+        StringBuilder tmp = new StringBuilder();
         for (PdfChunk c : chunks) {
             tmp.append(c.toString());
         }
@@ -450,12 +450,10 @@ public class PdfLine {
         float normal_leading = 0;
         float image_leading = -10000;
         PdfChunk chunk;
-        for (int k = 0; k < chunks.size(); ++k) {
-            chunk = chunks.get(k);
+        for (PdfChunk o : chunks) {
             if (!chunk.isImage()) {
                 normal_leading = Math.max(chunk.font().size(), normal_leading);
-            }
-            else {
+            } else {
                 image_leading = Math.max(chunk.getImage().getScaledHeight() + chunk.getImageOffsetY(), image_leading);
             }
         }
@@ -492,8 +490,7 @@ public class PdfLine {
      */
     public float getWidthCorrected(float charSpacing, float wordSpacing) {
         float total = 0;
-        for (int k = 0; k < chunks.size(); ++k) {
-            PdfChunk ck = chunks.get(k);
+        for (PdfChunk ck : chunks) {
             total += ck.getWidthCorrected(charSpacing, wordSpacing);
         }
         return total;
@@ -506,8 +503,7 @@ public class PdfLine {
  */
    public float getAscender() {
        float ascender = 0;
-       for (int k = 0; k < chunks.size(); ++k) {
-           PdfChunk ck = chunks.get(k);
+       for (PdfChunk ck : chunks) {
            if (ck.isImage())
                ascender = Math.max(ascender, ck.getImage().getScaledHeight() + ck.getImageOffsetY());
            else {
@@ -525,8 +521,7 @@ public class PdfLine {
  */
     public float getDescender() {
         float descender = 0;
-        for (int k = 0; k < chunks.size(); ++k) {
-            PdfChunk ck = chunks.get(k);
+        for (PdfChunk ck : chunks) {
             if (ck.isImage())
                 descender = Math.min(descender, ck.getImageOffsetY());
             else {

@@ -28,12 +28,9 @@ public class UnembedFontPdfSmartCopy extends PdfSmartCopy {
             if ((PdfName.FONTFILE.equals(key)
                     || PdfName.FONTFILE2.equals(key)
                     || PdfName.FONTFILE3.equals(key))
-                && !PdfReader.isFontSubset(PdfReader.getFontNameFromDescriptor(in)))
-            {
+                    && !PdfReader.isFontSubset(PdfReader.getFontNameFromDescriptor(in))) {
                 continue;
-            }
-            else
-            {
+            } else {
                 out.put(key, copyObject(value));
             }
         }

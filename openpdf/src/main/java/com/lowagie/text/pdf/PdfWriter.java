@@ -454,8 +454,8 @@ public class PdfWriter extends DocWriter implements
             int first = entry.getRefnum();
             int len = 0;
             ArrayList<Integer> sections = new ArrayList<>();
-            for (Iterator<PdfCrossReference> i = xrefs.iterator(); i.hasNext(); ) {
-                entry = i.next();
+            for (PdfCrossReference xref1 : xrefs) {
+                entry = xref1;
                 if (first + len == entry.getRefnum())
                     ++len;
                 else {
@@ -479,9 +479,8 @@ public class PdfWriter extends DocWriter implements
                 try (
                     ByteBuffer buf = new ByteBuffer();
                 ) {
-                    for (Iterator<PdfCrossReference> i = xrefs.iterator(); i.hasNext(); ) {
-                        entry = i.next();
-                        entry.toPdf(mid, buf);
+                    for (PdfCrossReference xref : xrefs) {
+                        xref.toPdf(mid, buf);
                     }
                     PdfStream xr = new PdfStream(buf.toByteArray());
 
@@ -498,18 +497,15 @@ public class PdfWriter extends DocWriter implements
                     xr.put(PdfName.W, new PdfArray(new int[]{1, mid, 2}));
                     xr.put(PdfName.TYPE, PdfName.XREF);
                     PdfArray idx = new PdfArray();
-                    for (int k = 0; k < sections.size(); ++k)
-                        idx.add(new PdfNumber(sections.get(k)));
+                    for (Integer section : sections) idx.add(new PdfNumber(section));
                     xr.put(PdfName.INDEX, idx);
                     if (prevxref > 0)
                         xr.put(PdfName.PREV, new PdfNumber(prevxref));
-
                     PdfEncryption enc = writer.crypto;
                     writer.crypto = null;
                     PdfIndirectObject indirect = new PdfIndirectObject(refNumber, xr, writer);
                     indirect.writeTo(writer.getOs());
                     writer.crypto = enc;
-                }
             }
             else {
                 os.write(getISOBytes("xref\n"));
@@ -775,13 +771,13 @@ public class PdfWriter extends DocWriter implements
         for (Map.Entry<String,Object[]> entry : dest.entrySet()) {
             String name = entry.getKey();
             Object[] obj = entry.getValue();
-            PdfDestination destination = (PdfDestination)obj[2];
+            PdfDestination destination = (PdfDestination) obj[2];
             if (obj[1] == null)
                 obj[1] = getPdfIndirectReference();
             if (destination == null)
-                addToBody(new PdfString("invalid_" + name), (PdfIndirectReference)obj[1]);
+                addToBody(new PdfString("invalid_" + name), (PdfIndirectReference) obj[1]);
             else
-                addToBody(destination, (PdfIndirectReference)obj[1]);
+                addToBody(destination, (PdfIndirectReference) obj[1]);
         }
     }
 
@@ -1256,14 +1252,12 @@ public class PdfWriter extends DocWriter implements
 
     protected void addSharedObjectsToBody() throws IOException {
         // [F3] add the fonts
-        for (Iterator<FontDetails> it = documentFonts.values().iterator(); it.hasNext();) {
-            FontDetails details = it.next();
+        for (FontDetails details : documentFonts.values()) {
             details.writeFont(this);
         }
         // [F4] add the form XObjects
-        for (Iterator<Object[]> it = formXObjects.values().iterator(); it.hasNext();) {
-            Object[] objs = it.next();
-            PdfTemplate template = (PdfTemplate)objs[1];
+        for (Object[] objs : formXObjects.values()) {
+            PdfTemplate template = (PdfTemplate) objs[1];
             if (template != null && template.getIndirectReference() instanceof PRIndirectReference)
                 continue;
             if (template != null && template.getType() == PdfTemplate.TYPE_TEMPLATE) {
@@ -1271,53 +1265,51 @@ public class PdfWriter extends DocWriter implements
             }
         }
         // [F5] add all the dependencies in the imported pages
-        for (Iterator<PdfReaderInstance> it = importedPages.values().iterator(); it.hasNext();) {
-            currentPdfReaderInstance = it.next();
+        for (PdfReaderInstance pdfReaderInstance : importedPages.values()) {
+            currentPdfReaderInstance = pdfReaderInstance;
             currentPdfReaderInstance.writeAllPages();
         }
         currentPdfReaderInstance = null;
         // [F6] add the spotcolors
-        for (Iterator<ColorDetails> it = documentColors.values().iterator(); it.hasNext();) {
-            ColorDetails color = it.next();
+        for (ColorDetails color : documentColors.values()) {
             addToBody(color.getSpotColor(this), color.getIndirectReference());
         }
         // [F7] add the pattern
-        for (Iterator<PdfPatternPainter> it = documentPatterns.keySet().iterator(); it.hasNext();) {
-            PdfPatternPainter pat = it.next();
+        for (PdfPatternPainter pat : documentPatterns.keySet()) {
             addToBody(pat.getPattern(compressionLevel), pat.getIndirectReference());
         }
         // [F8] add the shading patterns
-        for (Iterator<PdfShadingPattern> it = documentShadingPatterns.keySet().iterator(); it.hasNext();) {
-            PdfShadingPattern shadingPattern = it.next();
+        for (PdfShadingPattern shadingPattern : documentShadingPatterns.keySet()) {
             shadingPattern.addToBody();
         }
         // [F9] add the shadings
-        for (Iterator<PdfShading> it = documentShadings.keySet().iterator(); it.hasNext();) {
-            PdfShading shading = it.next();
+        for (PdfShading shading : documentShadings.keySet()) {
             shading.addToBody();
         }
         // [F10] add the extgstate
-        for (Iterator<Map.Entry<PdfDictionary, PdfObject[]>> it = documentExtGState.entrySet().iterator(); it.hasNext();) {
-            Map.Entry<PdfDictionary, PdfObject[]> entry = it.next();
+        for (Map.Entry<PdfDictionary, PdfObject[]> entry : documentExtGState.entrySet()) {
             PdfDictionary gstate = entry.getKey();
             PdfObject[] obj = entry.getValue();
-            addToBody(gstate, (PdfIndirectReference)obj[1]);
+            addToBody(gstate, (PdfIndirectReference) obj[1]);
         }
         // [F11] add the properties
-        for (Iterator<Map.Entry<Object, PdfObject[]>> it = documentProperties.entrySet().iterator(); it.hasNext();) {
-            Map.Entry<Object, PdfObject[]> entry = it.next();
+        for (Map.Entry<Object, PdfObject[]> entry : documentProperties.entrySet()) {
             Object prop = entry.getKey();
             PdfObject[] obj = entry.getValue();
-            if (prop instanceof PdfLayerMembership){
-                PdfLayerMembership layer = (PdfLayerMembership)prop;
+            if (prop instanceof PdfLayerMembership) {
+                PdfLayerMembership layer = (PdfLayerMembership) prop;
                 addToBody(layer.getPdfObject(), layer.getRef());
-            }
-            else if ((prop instanceof PdfDictionary) && !(prop instanceof PdfLayer)){
-                addToBody((PdfDictionary)prop, (PdfIndirectReference)obj[1]);
+            } else if ((prop instanceof PdfDictionary) && !(prop instanceof PdfLayer)) {
+                addToBody((PdfDictionary) prop, (PdfIndirectReference) obj[1]);
             }
         }
         // [F13] add the OCG layers
+<<<<<<< HEAD
         for (PdfOCG layer : documentOCG) {
+=======
+        for (Object o : documentOCG) {
+            PdfOCG layer = (PdfOCG) o;
+>>>>>>> refs/remotes/origin/master
             addToBody(layer.getPdfObject(), layer.getRef());
         }
     }
@@ -1355,7 +1347,7 @@ public class PdfWriter extends DocWriter implements
         Object[] kids = SimpleBookmark.iterateOutlines(this, topRef, newBookmarks, namedAsNames);
         top.put(PdfName.FIRST, (PdfIndirectReference)kids[0]);
         top.put(PdfName.LAST, (PdfIndirectReference)kids[1]);
-        top.put(PdfName.COUNT, new PdfNumber(((Integer)kids[2]).intValue()));
+        top.put(PdfName.COUNT, new PdfNumber((Integer) kids[2]));
         addToBody(top, topRef);
         catalog.put(PdfName.OUTLINES, topRef);
     }
@@ -1522,8 +1514,8 @@ public class PdfWriter extends DocWriter implements
         int page;
         String dest;
         PdfDestination destination;
-        for (Iterator<Map.Entry<String, String>> i = map.entrySet().iterator(); i.hasNext(); ) {
-            entry = i.next();
+        for (Map.Entry<String, String> stringStringEntry : map.entrySet()) {
+            entry = stringStringEntry;
             dest = entry.getValue();
             page = Integer.parseInt(dest.substring(0, dest.indexOf(" ")));
             destination = new PdfDestination(dest.substring(dest.indexOf(" ") + 1));
@@ -1878,7 +1870,7 @@ public class PdfWriter extends DocWriter implements
             return false;
         PdfDictionary out = outs.getAsDict(0);
         PdfObject obj = PdfReader.getPdfObject(out.get(PdfName.S));
-        if (obj == null || !PdfName.GTS_PDFX.equals(obj))
+        if (!PdfName.GTS_PDFX.equals(obj))
             return false;
         if (checkExistence)
             return true;
@@ -2173,8 +2165,7 @@ public class PdfWriter extends DocWriter implements
     }
 
     void eliminateFontSubset(PdfDictionary fonts) {
-        for (Iterator<FontDetails> it = documentFonts.values().iterator(); it.hasNext();) {
-            FontDetails ft = it.next();
+        for (FontDetails ft : documentFonts.values()) {
             if (fonts.get(ft.getFontName()) != null)
                 ft.setSubset(false);
         }
@@ -2184,7 +2175,11 @@ public class PdfWriter extends DocWriter implements
 
     /** The form XObjects in this document. The key is the xref and the value
         is Object[]{PdfName, template}.*/
+<<<<<<< HEAD
     protected Map<PdfIndirectReference, Object[]> formXObjects = new LinkedHashMap<>();
+=======
+    protected LinkedHashMap<PdfIndirectReference, Object[]> formXObjects = new LinkedHashMap<>();
+>>>>>>> refs/remotes/origin/master
 
     /** The name counter for the form XObjects name. */
     protected int formXObjectsCounter = 1;
@@ -2252,7 +2247,11 @@ public class PdfWriter extends DocWriter implements
 
 //  [F5] adding pages imported form other PDF documents
 
+<<<<<<< HEAD
     protected Map<PdfReader, PdfReaderInstance> importedPages = new HashMap<>();
+=======
+    protected HashMap<PdfReader, PdfReaderInstance> importedPages = new HashMap<>();
+>>>>>>> refs/remotes/origin/master
 
     /**
      * Use this method to get a page from other PDF document.
@@ -2515,8 +2514,8 @@ public class PdfWriter extends DocWriter implements
         PdfArray kids = new PdfArray();
         if (layer.getTitle() != null)
             kids.add(new PdfString(layer.getTitle(), PdfObject.TEXT_UNICODE));
-        for (int k = 0; k < children.size(); ++k) {
-            getOCGOrder(kids, children.get(k));
+        for (PdfLayer child : children) {
+            getOCGOrder(kids, child);
         }
         if (kids.size() > 0)
             order.add(kids);
@@ -2524,9 +2523,15 @@ public class PdfWriter extends DocWriter implements
 
     private void addASEvent(PdfName event, PdfName category) {
         PdfArray arr = new PdfArray();
+<<<<<<< HEAD
         for (PdfOCG ocg : documentOCG) {
             PdfLayer layer = (PdfLayer)ocg;
             PdfDictionary usage = (PdfDictionary)layer.get(PdfName.USAGE);
+=======
+        for (Object o : documentOCG) {
+            PdfLayer layer = (PdfLayer) o;
+            PdfDictionary usage = (PdfDictionary) layer.get(PdfName.USAGE);
+>>>>>>> refs/remotes/origin/master
             if (usage != null && usage.get(category) != null)
                 arr.add(layer.getRef());
         }
@@ -2557,8 +2562,13 @@ public class PdfWriter extends DocWriter implements
         }
         if (OCProperties.get(PdfName.OCGS) == null) {
             PdfArray gr = new PdfArray();
+<<<<<<< HEAD
             for (PdfOCG ocg : documentOCG) {
                 PdfLayer layer = (PdfLayer)ocg;
+=======
+            for (Object o : documentOCG) {
+                PdfLayer layer = (PdfLayer) o;
+>>>>>>> refs/remotes/origin/master
                 gr.add(layer.getRef());
             }
             OCProperties.put(PdfName.OCGS, gr);
@@ -2572,16 +2582,26 @@ public class PdfWriter extends DocWriter implements
                 it.remove();
         }
         PdfArray order = new PdfArray();
+<<<<<<< HEAD
         for (PdfOCG ocg : docOrder) {
             PdfLayer layer = (PdfLayer)ocg;
+=======
+        for (Object o1 : docOrder) {
+            PdfLayer layer = (PdfLayer) o1;
+>>>>>>> refs/remotes/origin/master
             getOCGOrder(order, layer);
         }
         PdfDictionary d = new PdfDictionary();
         OCProperties.put(PdfName.D, d);
         d.put(PdfName.ORDER, order);
         PdfArray gr = new PdfArray();
+<<<<<<< HEAD
         for (PdfOCG ocg : documentOCG) {
             PdfLayer layer = (PdfLayer)ocg;
+=======
+        for (Object o : documentOCG) {
+            PdfLayer layer = (PdfLayer) o;
+>>>>>>> refs/remotes/origin/master
             if (!layer.isOn())
                 gr.add(layer.getRef());
         }
@@ -3115,7 +3135,11 @@ public class PdfWriter extends DocWriter implements
      * A HashSet with Stream objects containing JBIG2 Globals
      * @since 2.1.5
      */
+<<<<<<< HEAD
     protected Map<PdfStream, PdfIndirectReference> JBIG2Globals = new HashMap<>();
+=======
+    protected HashMap<PdfStream, PdfIndirectReference> JBIG2Globals = new HashMap<>();
+>>>>>>> refs/remotes/origin/master
     /**
      * Gets an indirect reference to a JBIG2 Globals stream.
      * Adds the stream if it hasn't already been added to the writer.
@@ -3125,8 +3149,8 @@ public class PdfWriter extends DocWriter implements
     protected PdfIndirectReference getReferenceJBIG2Globals(byte[] content) {
         if (content == null) return null;
         PdfStream stream;
-        for (Iterator<PdfStream> i = JBIG2Globals.keySet().iterator(); i.hasNext(); ) {
-            stream = i.next();
+        for (PdfStream pdfStream : JBIG2Globals.keySet()) {
+            stream = pdfStream;
             if (Arrays.equals(content, stream.getBytes())) {
                 return JBIG2Globals.get(stream);
             }

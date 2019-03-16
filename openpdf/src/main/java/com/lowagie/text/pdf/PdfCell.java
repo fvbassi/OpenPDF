@@ -267,7 +267,6 @@ public class PdfCell extends Rectangle {
                         case Element.CHAPTER:
                             line.resetAlignment();
                             flushCurrentLine();
-                            break;
                     }
             }
         }
@@ -323,7 +322,7 @@ public class PdfCell extends Rectangle {
         for (Element ele : list.getChildren()) {
             switch (ele.type()) {
                 case Element.LISTITEM:
-                    ListItem item = (ListItem)ele;
+                    ListItem item = (ListItem) ele;
                     line = new PdfLine(left + item.getIndentationLeft(), right, alignment, item.getLeading());
                     line.setListItem(item);
                     for (Chunk c : item.getChunks()) {
@@ -340,10 +339,9 @@ public class PdfCell extends Rectangle {
                     }
                     break;
                 case Element.LIST:
-                    List sublist = (List)ele;
+                    List sublist = (List) ele;
                     addList(sublist, left + sublist.getIndentationLeft(), right, alignment);
                     break;
-                default:
             }
         }
     }
@@ -781,13 +779,17 @@ public class PdfCell extends Rectangle {
             case Element.CHAPTER:
             case Element.LISTITEM:
             case Element.PARAGRAPH:
-            case Element.LIST:
                 for (Element e : ((ComposedElement<Element>) element).getChildren()) {
-                    processActions(e, action, allActions);
+                    processActions((Element) i.next(), action, allActions);
                 }
                 break;
             case Element.CHUNK:
                 allActions.add(action);
+                break;
+            case Element.LIST:
+                for (Element e : ((ComposedElement<Element>) element).getChildren()) {
+                    processActions((Element) i.next(), action, allActions);
+                }
                 break;
             default:
                 int n = element.getChunks().size();

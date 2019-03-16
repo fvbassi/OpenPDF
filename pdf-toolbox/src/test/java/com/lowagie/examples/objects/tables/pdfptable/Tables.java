@@ -6,7 +6,7 @@
  *
  * --> Copyright 2001-2005 by G. Martinelli and Bruno Lowagie <--
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
  * http://www.lowagie.com/iText/tutorial/
  *
@@ -14,7 +14,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 package com.lowagie.examples.objects.tables.pdfptable;
 
@@ -108,10 +108,8 @@ public class Tables {
             table.writeSelectedRows(0, -1, 50, pos, writer.getDirectContent());
         }
 
-        catch (DocumentException de) {
+        catch (DocumentException | IOException de) {
             System.err.println(de.getMessage());
-        } catch (IOException ioe) {
-            System.err.println(ioe.getMessage());
         }
         // step 5
         document.close();

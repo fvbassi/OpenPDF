@@ -1,15 +1,15 @@
 /*
  * $Id: JFreeChartExample.java 3838 2009-04-07 18:34:15Z mstorer $
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
- * http://itextdocs.lowagie.com/tutorial/
+ * https://github.com/LibrePDF/OpenPDF/wiki/Tutorial
  *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 package com.lowagie.examples.directcontent.graphics2D;
 
@@ -79,11 +79,8 @@ public class JFreeChartExample {
             cb.addTemplate(tp, 0, 0);
             cb.sanityCheck();
         }
-        catch(DocumentException de) {
+        catch(DocumentException | FileNotFoundException de) {
             de.printStackTrace();
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
         // step 5
         document.close();

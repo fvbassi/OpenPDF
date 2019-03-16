@@ -403,8 +403,8 @@ public class AcroFields {
     }
     PdfArray opt = new PdfArray();
     if (sing != null) {
-      for (int k = 0; k < sing.length; ++k) {
-        opt.add(new PdfString(sing[k], PdfObject.TEXT_UNICODE));
+      for (String s : sing) {
+        opt.add(new PdfString(s, PdfObject.TEXT_UNICODE));
       }
     } else {
       for (int k = 0; k < exportValues.length; ++k) {
@@ -538,33 +538,38 @@ public class AcroFields {
         }
         if (tk.getTokenType() == PRTokeniser.TK_OTHER) {
           String operator = tk.getStringValue();
-          if (operator.equals("Tf")) {
+          switch (operator) {
+          case "Tf":
             if (stack.size() >= 2) {
               ret[DA_FONT] = stack.get(stack.size() - 2);
-              ret[DA_SIZE] = new Float(stack.get(stack.size() - 1));
+              ret[DA_SIZE] = new Float((String) stack.get(stack.size() - 1));
             }
-          } else if (operator.equals("g")) {
+            break;
+          case "g":
             if (stack.size() >= 1) {
-              float gray = new Float(stack.get(stack.size() - 1)).floatValue();
+              float gray = new Float((String) stack.get(stack.size() - 1));
               if (gray != 0) {
                 ret[DA_COLOR] = new GrayColor(gray);
               }
             }
-          } else if (operator.equals("rg")) {
+            break;
+          case "rg":
             if (stack.size() >= 3) {
-              float red = new Float(stack.get(stack.size() - 3)).floatValue();
-              float green = new Float(stack.get(stack.size() - 2)).floatValue();
-              float blue = new Float(stack.get(stack.size() - 1)).floatValue();
+              float red = new Float((String) stack.get(stack.size() - 3));
+              float green = new Float((String) stack.get(stack.size() - 2));
+              float blue = new Float((String) stack.get(stack.size() - 1));
               ret[DA_COLOR] = new Color(red, green, blue);
             }
-          } else if (operator.equals("k")) {
+            break;
+          case "k":
             if (stack.size() >= 4) {
-              float cyan = new Float(stack.get(stack.size() - 4)).floatValue();
-              float magenta = new Float(stack.get(stack.size() - 3)).floatValue();
-              float yellow = new Float(stack.get(stack.size() - 2)).floatValue();
-              float black = new Float(stack.get(stack.size() - 1)).floatValue();
+              float cyan = new Float((String) stack.get(stack.size() - 4));
+              float magenta = new Float((String) stack.get(stack.size() - 3));
+              float yellow = new Float((String) stack.get(stack.size() - 2));
+              float black = new Float((String) stack.get(stack.size() - 1));
               ret[DA_COLOR] = new CMYKColor(cyan, magenta, yellow, black);
             }
+            break;
           }
           stack.clear();
         } else {
@@ -584,7 +589,7 @@ public class AcroFields {
     if (da != null) {
       Object[] dab = splitDAelements(da.toUnicodeString());
       if (dab[DA_SIZE] != null) {
-        tx.setFontSize(((Float) dab[DA_SIZE]).floatValue());
+        tx.setFontSize((Float) dab[DA_SIZE]);
       }
       if (dab[DA_COLOR] != null) {
         tx.setTextColor((Color) dab[DA_COLOR]);
@@ -803,8 +808,7 @@ public class AcroFields {
       }
       ArrayList<Integer> indexes = new ArrayList<>();
       for (int k = 0; k < choicesExp.length; ++k) {
-        for (int j = 0; j < values.length; ++j) {
-          String val = values[j];
+        for (String val : values) {
           if (val != null && val.equals(choicesExp[k])) {
             indexes.add(k);
             break;
@@ -1046,7 +1050,7 @@ public class AcroFields {
                   fonts.put(psn, fd.getIndirectReference());
                 }
                 ByteBuffer buf = cb.getInternalBuffer();
-                buf.append(psn.getBytes()).append(' ').append(((Float) dao[DA_SIZE]).floatValue()).append(" Tf ");
+                buf.append(psn.getBytes()).append(' ').append((Float) dao[DA_SIZE]).append(" Tf ");
                 if (dao[DA_COLOR] != null) {
                   cb.setColorFill((Color) dao[DA_COLOR]);
                 }
@@ -1068,7 +1072,7 @@ public class AcroFields {
               PdfAppearance cb = new PdfAppearance();
               if (dao[DA_FONT] != null) {
                 ByteBuffer buf = cb.getInternalBuffer();
-                buf.append(new PdfName((String) dao[DA_FONT]).getBytes()).append(' ').append(((Float) dao[DA_SIZE]).floatValue())
+                buf.append(new PdfName((String) dao[DA_FONT]).getBytes()).append(' ').append((Float) dao[DA_SIZE])
                     .append(" Tf ");
                 cb.setColorFill((Color) value);
                 PdfString s = new PdfString(cb.toString());
@@ -1089,7 +1093,7 @@ public class AcroFields {
               PdfAppearance cb = new PdfAppearance();
               if (dao[DA_FONT] != null) {
                 ByteBuffer buf = cb.getInternalBuffer();
-                buf.append(new PdfName((String) dao[DA_FONT]).getBytes()).append(' ').append(((Float) value).floatValue()).append(" Tf ");
+                buf.append(new PdfName((String) dao[DA_FONT]).getBytes()).append(' ').append((Float) value).append(" Tf ");
                 if (dao[DA_COLOR] != null) {
                   cb.setColorFill((Color) dao[DA_COLOR]);
                 }
@@ -1494,9 +1498,9 @@ public class AcroFields {
     }
     String[] options = getListOptionExport(name);
     PdfArray array = new PdfArray();
-    for (int i = 0; i < value.length; i++) {
+    for (String s1 : value) {
       for (int j = 0; j < options.length; j++) {
-        if (options[j].equals(value[i])) {
+        if (options[j].equals(s1)) {
           array.add(new PdfNumber(j));
           break;
         }
@@ -1505,8 +1509,8 @@ public class AcroFields {
     item.writeToAll(PdfName.I, array, Item.WRITE_MERGED | Item.WRITE_VALUE);
 
     PdfArray vals = new PdfArray();
-    for (int i = 0; i < value.length; ++i) {
-      vals.add(new PdfString(value[i]));
+    for (String s : value) {
+      vals.add(new PdfString(s));
     }
     item.writeToAll(PdfName.V, vals, Item.WRITE_MERGED | Item.WRITE_VALUE);
 
@@ -1595,7 +1599,7 @@ public class AcroFields {
           continue;
         }
         Rectangle r = PdfReader.getNormalizedRectangle(rect);
-        int page = item.getPage(k).intValue();
+        int page = item.getPage(k);
         int rotation = reader.getPageRotation(page);
         ret[ptr++] = page;
         if (rotation != 0) {
@@ -1671,8 +1675,8 @@ public class AcroFields {
     String[] names = new String[fields.size()];
     fields.keySet().toArray(names);
     boolean found = false;
-    for (int k = 0; k < names.length; ++k) {
-      boolean fr = removeField(names[k], page);
+    for (String name : names) {
+      boolean fr = removeField(name, page);
       found = (found || fr);
     }
     return found;
@@ -1702,7 +1706,7 @@ public class AcroFields {
       return false;
     }
     for (int k = 0; k < item.size(); ++k) {
-      int pageV = item.getPage(k).intValue();
+      int pageV = item.getPage(k);
       if (page != -1 && page != pageV) {
         continue;
       }
@@ -2066,8 +2070,8 @@ public class AcroFields {
         return;
       }
       hits = new IntHashtable();
-      for (int k = 0; k < inst.length; ++k) {
-        hits.put(inst[k], 1);
+      for (int i : inst) {
+        hits.put(i, 1);
       }
     }
 
@@ -2088,11 +2092,19 @@ public class AcroFields {
     if (sigNames != null) {
       return new ArrayList<>(sigNames.keySet());
     }
+<<<<<<< HEAD
 
     sigNames = new HashMap<>();
     ArrayList<Object[]> sorter = new ArrayList<>();
     for (Map.Entry<String,Item> entry : fields.entrySet()) {
       Item item = entry.getValue();
+=======
+    sigNames = new HashMap();
+    ArrayList sorter = new ArrayList();
+    for (Map.Entry<String, Item> stringItemEntry : fields.entrySet()) {
+      Map.Entry entry = stringItemEntry;
+      Item item = (Item) entry.getValue();
+>>>>>>> refs/remotes/origin/master
       PdfDictionary merged = item.getMerged(0);
       if (!PdfName.SIG.equals(merged.get(PdfName.FT))) {
         continue;
@@ -2113,10 +2125,24 @@ public class AcroFields {
       if (rangeSize < 2) {
         continue;
       }
-      int length = ro.getAsNumber(rangeSize - 1).intValue() + ro.getAsNumber(rangeSize - 2).intValue();
+      /*
+       * From the PDF32000_2008 spec: Byterange: An array of pairs of integers
+       * (starting byte offset, length in bytes) Also see:
+       * https://pdf-insecurity.org/download/paper.pdf
+       */
+      int lengthOfSignedBlocks = 0;
+      for (int i = rangeSize - 1; i > 0; i = i - 2) {
+        lengthOfSignedBlocks += ro.getAsNumber(i).intValue();
+      }
+      int unsignedBlock = contents.getOriginalBytes().length * 2 + 2;
+      int length = lengthOfSignedBlocks + unsignedBlock;
       sorter.add(new Object[]{entry.getKey(), new int[]{length, 0}});
     }
+<<<<<<< HEAD
     Collections.sort(sorter, SORTER_COMPARATOR);
+=======
+    sorter.sort(new SorterComparator());
+>>>>>>> refs/remotes/origin/master
     if (!sorter.isEmpty()) {
       if (((int[]) sorter.get(sorter.size() - 1)[1])[0] == reader.getFileLength()) {
         totalRevisions = sorter.size();
@@ -2141,9 +2167,16 @@ public class AcroFields {
    */
   public ArrayList<String> getBlankSignatureNames() {
     getSignatureNames();
+<<<<<<< HEAD
     ArrayList<String> sigs = new ArrayList<>();
     for (Map.Entry<String,Item> entry : fields.entrySet()) {
       Item item = entry.getValue();
+=======
+    ArrayList sigs = new ArrayList();
+    for (Map.Entry<String, Item> stringItemEntry : fields.entrySet()) {
+      Map.Entry entry = stringItemEntry;
+      Item item = (Item) entry.getValue();
+>>>>>>> refs/remotes/origin/master
       PdfDictionary merged = item.getMerged(0);
       if (!PdfName.SIG.equals(merged.getAsName(PdfName.FT))) {
         continue;
@@ -2683,10 +2716,10 @@ public class AcroFields {
     PdfDictionary merged = item.getMerged(order);
     PdfDictionary values = item.getValue(order);
     PdfDictionary widgets = item.getWidget(order);
-    for (int k = 0; k < buttonRemove.length; ++k) {
-      merged.remove(buttonRemove[k]);
-      values.remove(buttonRemove[k]);
-      widgets.remove(buttonRemove[k]);
+    for (PdfName pdfName : buttonRemove) {
+      merged.remove(pdfName);
+      values.remove(pdfName);
+      widgets.remove(pdfName);
     }
     for (PdfName key : button.getKeys()) {
       if (key.equals(PdfName.T) || key.equals(PdfName.RECT))

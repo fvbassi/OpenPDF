@@ -147,7 +147,7 @@ public class SimpleTable extends Rectangle implements ComposedElement<SimpleCell
         table.setPadding(cellpadding);
         table.cloneNonPositionParameters(this);
         int pos;
-        for(SimpleCell row : getChildren()) {
+        for(SimpleCell row : content) {
             pos = 0;
             for(SimpleCell cell : row.getCells()) {
                 table.addCell(cell.createCell(row));
@@ -214,16 +214,16 @@ public class SimpleTable extends Rectangle implements ComposedElement<SimpleCell
         for (SimpleCell row : content) {
             pos = 0;
             for (SimpleCell cell : row.getCells()) {
-                if (Float.isNaN(cell.getSpacing_left()))    {
+                if (Float.isNaN(cell.getSpacing_left())) {
                     cell.setSpacing_left(cellspacing / 2f);
                 }
-                if (Float.isNaN(cell.getSpacing_right()))    {
+                if (Float.isNaN(cell.getSpacing_right())) {
                     cell.setSpacing_right(cellspacing / 2f);
                 }
-                if (Float.isNaN(cell.getSpacing_top()))    {
+                if (Float.isNaN(cell.getSpacing_top())) {
                     cell.setSpacing_top(cellspacing / 2f);
                 }
-                if (Float.isNaN(cell.getSpacing_bottom()))    {
+                if (Float.isNaN(cell.getSpacing_bottom())) {
                     cell.setSpacing_bottom(cellspacing / 2f);
                 }
                 cell.setPadding(cellpadding);

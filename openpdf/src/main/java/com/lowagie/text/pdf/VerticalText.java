@@ -199,8 +199,9 @@ public class VerticalText {
         PdfChunk split = chunks.get(currentChunkMarker);
         split.setValue(splittedChunkText);
         chunks.set(currentChunkMarker, currentStandbyChunk);
-        for (int j = currentChunkMarker - 1; j >= 0; --j)
-            chunks.remove(j);
+        if (currentChunkMarker > 0) {
+            chunks.subList(0, currentChunkMarker).clear();
+        }
     }
 
     /**

@@ -196,7 +196,7 @@ public class PdfContentStreamHandler {
         @Override
         public void invoke(List<PdfObject> operands,
                 PdfContentStreamHandler handler, PdfDictionary resources) {
-            textMoveNextLine.invoke(new ArrayList<PdfObject>(0), handler,
+            textMoveNextLine.invoke(new ArrayList<>(0), handler,
                     resources);
             showText.invoke(operands, handler, resources);
         }
@@ -1050,7 +1050,7 @@ public class PdfContentStreamHandler {
             throw new RuntimeException(
                     "can't get text with unprocessed stack items");
         }
-        StringBuffer res = new StringBuffer();
+        StringBuilder res = new StringBuilder();
         for (TextAssemblyBuffer fragment : textFragments) {
             res.append(fragment.getText());
         }

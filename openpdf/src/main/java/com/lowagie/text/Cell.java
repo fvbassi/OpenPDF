@@ -255,6 +255,19 @@ public class Cell extends Rectangle implements ComposedElement<Element>, TextEle
         return Element.CELL;
     }
 
+    /**
+     * Gets all the chunks in this element.
+     *
+     * @return    an <CODE>ArrayList</CODE>
+     */
+    public ArrayList<Chunk> getChunks() {
+        ArrayList<Chunk> tmp = new ArrayList<>();
+        for (Element e : content) {
+            tmp.addAll(e.getChunks());
+        }
+        return tmp;
+    }
+
     // Getters and setters
 
     /**

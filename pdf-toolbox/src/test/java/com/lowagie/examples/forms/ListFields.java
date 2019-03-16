@@ -1,15 +1,15 @@
 /*
  * $Id: ListFields.java 3688 2009-02-10 22:27:37Z mstorer $
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
- * http://itextdocs.lowagie.com/tutorial/
+ * https://github.com/LibrePDF/OpenPDF/wiki/Tutorial
  *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 
 package com.lowagie.examples.forms;
@@ -47,11 +47,11 @@ public class ListFields {
             PrintStream stream = new PrintStream(new FileOutputStream("listfields.txt"));
             stream.println("ListFields output file");
             stream.println("==================================================");
-            for (int i = 0; i < args.length; i++) {
+            for (String arg : args) {
                 stream.print("Filename: ");
-                stream.println(args[i]);
+                stream.println(arg);
                 stream.println();
-                PdfReader reader = new PdfReader(args[i]);
+                PdfReader reader = new PdfReader(arg);
                 PRAcroForm form = reader.getAcroForm();
                 if (form == null) {
                     stream.println("This document has no fields.");
@@ -60,7 +60,7 @@ public class ListFields {
                 PdfLister list = new PdfLister(stream);
                 Map<Integer,PRAcroForm.FieldInformation> refToField = new HashMap<>();
                 for(PRAcroForm.FieldInformation field : form.getFields()) {
-                    refToField.put(new Integer(field.getRef().getNumber()), field);
+                    refToField.put(field.getRef().getNumber(), field);
                 }
                 for (int page = 1; page <= reader.getNumberOfPages(); ++page) {
                     PdfDictionary dPage = reader.getPageN(page);
@@ -69,7 +69,7 @@ public class ListFields {
                         continue;
                     for (int annotIdx = 0; annotIdx < annots.size(); ++annotIdx) {
                         PdfIndirectReference ref = annots.getAsIndirectObject(annotIdx);
-                        PdfDictionary annotDict = annots.getAsDict( annotIdx );
+                        PdfDictionary annotDict = annots.getAsDict(annotIdx);
                         PdfName subType = annotDict.getAsName(PdfName.SUBTYPE);
                         if (subType == null || !subType.equals(PdfName.WIDGET))
                             continue;

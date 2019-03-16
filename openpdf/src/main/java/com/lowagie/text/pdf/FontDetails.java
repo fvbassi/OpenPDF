@@ -182,8 +182,7 @@ class FontDetails {
             case BaseFont.FONT_TYPE_TT: {
                 b = baseFont.convertToBytes(text);
                 int len = b.length;
-                for (int k = 0; k < len; ++k)
-                    shortTag[b[k] & 0xff] = 1;
+                for (byte b1 : b) shortTag[b1 & 0xff] = 1;
                 break;
             }
             case BaseFont.FONT_TYPE_CJK: {
@@ -266,7 +265,7 @@ class FontDetails {
             if (!longTag.containsKey(codeKey)) {
                 int glyphWidth = ttu.getGlyphWidth(code);
                 Integer charCode = ttu.getCharacterCode(code);
-                int[] metrics = charCode != null ? new int[] { code, glyphWidth, charCode.intValue() } : new int[] {
+                int[] metrics = charCode != null ? new int[] { code, glyphWidth, charCode} : new int[] {
                         code, glyphWidth };
                 longTag.put(codeKey, metrics);
             }
@@ -308,14 +307,14 @@ class FontDetails {
                         firstChar = 255;
                         lastChar = 255;
                     }
-                    baseFont.writeFont(writer, indirectReference, new Object[]{firstChar, lastChar, shortTag, Boolean.valueOf(subset)});
+                    baseFont.writeFont(writer, indirectReference, new Object[]{firstChar, lastChar, shortTag, subset});
                     break;
                 }
                 case BaseFont.FONT_TYPE_CJK:
                     baseFont.writeFont(writer, indirectReference, new Object[]{cjkTag});
                     break;
                 case BaseFont.FONT_TYPE_TTUNI:
-                    baseFont.writeFont(writer, indirectReference, new Object[]{longTag, Boolean.valueOf(subset)});
+                    baseFont.writeFont(writer, indirectReference, new Object[]{longTag, subset});
                     break;
             }
         }

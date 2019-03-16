@@ -370,8 +370,7 @@ public class PdfPTable implements LargeElement{
         if (columnWidth.length != getNumberOfColumns())
             throw new DocumentException(MessageLocalization.getComposedMessage("wrong.number.of.columns"));
         totalWidth = 0;
-        for (int k = 0; k < columnWidth.length; ++k)
-            totalWidth += columnWidth[k];
+        for (float v : columnWidth) totalWidth += v;
         setWidths(columnWidth);
     }
 
@@ -386,8 +385,7 @@ public class PdfPTable implements LargeElement{
         if (columnWidth.length != getNumberOfColumns())
             throw new IllegalArgumentException(MessageLocalization.getComposedMessage("wrong.number.of.columns"));
         float totalWidth = 0;
-        for (int k = 0; k < columnWidth.length; ++k)
-            totalWidth += columnWidth[k];
+        for (float v : columnWidth) totalWidth += v;
         widthPercentage = totalWidth / (pageSize.getRight() - pageSize.getLeft()) * 100f;
         setWidths(columnWidth);
     }

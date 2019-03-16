@@ -93,9 +93,7 @@ public class RandomAccessFileOrArray implements DataInput, Closeable {
         if (!file.canRead()) {
             if (filename.startsWith("file:/") || filename.startsWith("http://")
                     || filename.startsWith("https://") || filename.startsWith("jar:") || filename.startsWith("wsjar:")) {
-                try (
-                    InputStream is = new URL(filename).openStream();
-                ) {
+                try (InputStream is = new URL(filename).openStream()) {
                     this.arrayIn = InputStreamToArray(is);
                     return;
                 }
@@ -112,10 +110,8 @@ public class RandomAccessFileOrArray implements DataInput, Closeable {
             }
         }
         else if (forceRead) {
-            try (
-                InputStream is = new FileInputStream(file);
-            ) {
-                this.arrayIn = InputStreamToArray(is);
+            try (InputStream s = new FileInputStream(file)) {
+                this.arrayIn = InputStreamToArray(s);
             }
             return;
         }
@@ -127,9 +123,7 @@ public class RandomAccessFileOrArray implements DataInput, Closeable {
     }
 
     public RandomAccessFileOrArray(URL url) throws IOException {
-        try (
-                InputStream is = url.openStream();
-        ) {
+        try (InputStream is = url.openStream()) {
             this.arrayIn = InputStreamToArray(is);
         }
     }
@@ -578,7 +572,7 @@ public class RandomAccessFileOrArray implements DataInput, Closeable {
     }
 
     public String readLine() throws IOException {
-        StringBuffer input = new StringBuffer();
+        StringBuilder input = new StringBuilder();
         int c = -1;
         boolean eol = false;
 

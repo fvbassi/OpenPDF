@@ -54,6 +54,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -74,28 +75,28 @@ public final class SimpleNamedDestination implements SimpleXMLDocHandler {
     private SimpleNamedDestination() {
     }
 
-    public static HashMap<String,String> getNamedDestination(PdfReader reader, boolean fromNames) {
+    public static HashMap getNamedDestination(PdfReader reader, boolean fromNames) {
         IntHashtable pages = new IntHashtable();
         int numPages = reader.getNumberOfPages();
         for (int k = 1; k <= numPages; ++k)
             pages.put(reader.getPageOrigRef(k).getNumber(), k);
-
-        HashMap<String,String> out = new HashMap<>();
-
-        HashMap<String,PdfArray> names = fromNames ? reader.getNamedDestinationFromNames() : reader.getNamedDestinationFromStrings();
-        for (Map.Entry<String,PdfArray> entry : names.entrySet()) {
+        Map<String,PdfArray> names = fromNames ? reader.getNamedDestinationFromNames() : reader.getNamedDestinationFromStrings();
+        for (Iterator<Map.Entry<String,PdfArray>> it = names.entrySet().iterator(); it.hasNext();) {
+            Map.Entry<String,PdfArray> entry = it.next();
             PdfArray arr = entry.getValue();
+            StringBuilder s = new StringBuilder();
             try {
-                StringBuilder s = new StringBuilder();
                 s.append(pages.get(arr.getAsIndirectObject(0).getNumber()));
                 s.append(' ').append(arr.getPdfObject(1).toString().substring(1));
                 for (int k = 2; k < arr.size(); ++k)
                     s.append(' ').append(arr.getPdfObject(k).toString());
-                out.put(entry.getKey(), s.toString());
-            } catch (Exception e) {
+                entry.setValue(s.toString());
+            }
+            catch (Exception e) {
+                it.remove();
             }
         }
-        return out;
+        return names;
     }
 
     /**
@@ -206,8 +207,7 @@ public final class SimpleNamedDestination implements SimpleXMLDocHandler {
                 PdfArray ar = createDestinationArray(value, writer);
                 PdfName kn = new PdfName(key);
                 dic.put(kn, ar);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 // empty on purpose
             }
         }
@@ -230,17 +230,15 @@ public final class SimpleNamedDestination implements SimpleXMLDocHandler {
     }
 
     public static String escapeBinaryString(String s) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         char[] cc = s.toCharArray();
         int len = cc.length;
-        for (int k = 0; k < len; ++k) {
-            char c = cc[k];
+        for (char c : cc) {
             if (c < ' ') {
                 buf.append('\\');
                 String octal = "00" + Integer.toOctalString(c);
                 buf.append(octal.substring(octal.length() - 3));
-            }
-            else if (c == '\\')
+            } else if (c == '\\')
                 buf.append("\\\\");
             else
                 buf.append(c);
@@ -249,7 +247,7 @@ public final class SimpleNamedDestination implements SimpleXMLDocHandler {
     }
 
     public static String unEscapeBinaryString(String s) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         char[] cc = s.toCharArray();
         int len = cc.length;
         for (int k = 0; k < len; ++k) {

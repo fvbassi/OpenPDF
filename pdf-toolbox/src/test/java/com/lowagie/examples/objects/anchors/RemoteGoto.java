@@ -1,27 +1,25 @@
 /*
  * $Id: RemoteGoto.java 3373 2008-05-12 16:21:24Z xlv $
  *
- * This code is part of the 'iText Tutorial'.
+ * This code is part of the 'OpenPDF Tutorial'.
  * You can find the complete tutorial at the following address:
- * http://itextdocs.lowagie.com/tutorial/
+ * https://github.com/LibrePDF/OpenPDF/wiki/Tutorial
  *
  * This code is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * itext-questions@lists.sourceforge.net
+ *  
  */
 
 package com.lowagie.examples.objects.anchors;
 
 import java.awt.Color;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URL;
 
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
 import com.lowagie.text.Paragraph;
@@ -121,17 +119,10 @@ public class RemoteGoto {
             // for both documents
             document.add(p2);
             document.add(p2);
-        }
-        catch(DocumentException de) {
-            System.err.println(de.getMessage());
-        }
-        catch(IOException ioe) {
+        } catch(Exception ioe) {
             System.err.println(ioe.getMessage());
         }
-        catch(Exception e) {
-            System.err.println(e.getMessage());
-        }
-        
+
         // step 5: we close the document
         document.close();
     }

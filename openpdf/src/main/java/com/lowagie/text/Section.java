@@ -432,7 +432,7 @@ public class Section implements ComposedElement<Element>, TextElementArray, Larg
         if (depth < 1) {
             return title;
         }
-        StringBuffer buf = new StringBuffer(" ");
+        StringBuilder buf = new StringBuilder(" ");
         for (int i = 0; i < depth; i++) {
             buf.insert(0, ".");
             buf.insert(0, numbers.get(i).intValue());

@@ -96,7 +96,14 @@ import java.text.AttributedCharacterIterator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
+<<<<<<< HEAD
 import java.util.List;
+=======
+import java.util.Map;
+import java.util.Set;
+
+import com.lowagie.text.pdf.internal.PolylineShape;
+>>>>>>> refs/remotes/origin/master
 import java.util.Locale;
 import java.util.Map;
 
@@ -268,8 +275,8 @@ public class PdfGraphics2D extends Graphics2D {
             Hashtable<String,Object> properties = new Hashtable<>();
             String[] keys = img.getPropertyNames();
             if (keys!=null) {
-                for (int i = 0; i < keys.length; i++) {
-                    properties.put(keys[i], img.getProperty(keys[i]));
+                for (String key : keys) {
+                    properties.put(key, img.getProperty(key));
                 }
             }
             BufferedImage result = new BufferedImage(cm, raster, isAlphaPremultiplied, properties);
@@ -309,31 +316,34 @@ public class PdfGraphics2D extends Graphics2D {
      */
     protected void doAttributes(AttributedCharacterIterator iter) {
         underline = false;
+<<<<<<< HEAD
         for (AttributedCharacterIterator.Attribute attribute : iter.getAttributes().keySet()) {
+=======
+        Set set = iter.getAttributes().keySet();
+        for (Object o : set) {
+            AttributedCharacterIterator.Attribute attribute = (AttributedCharacterIterator.Attribute) o;
+>>>>>>> refs/remotes/origin/master
             if (!(attribute instanceof TextAttribute))
                 continue;
-            TextAttribute textattribute = (TextAttribute)attribute;
-            if(textattribute.equals(TextAttribute.FONT)) {
-                Font font = (Font)iter.getAttributes().get(textattribute);
+            TextAttribute textattribute = (TextAttribute) attribute;
+            if (textattribute.equals(TextAttribute.FONT)) {
+                Font font = (Font) iter.getAttributes().get(textattribute);
                 setFont(font);
-            }
-            else if(textattribute.equals(TextAttribute.UNDERLINE)) {
-                if(iter.getAttributes().get(textattribute) == TextAttribute.UNDERLINE_ON)
+            } else if (textattribute.equals(TextAttribute.UNDERLINE)) {
+                if (iter.getAttributes().get(textattribute) == TextAttribute.UNDERLINE_ON)
                     underline = true;
-            }
-            else if(textattribute.equals(TextAttribute.SIZE)) {
+            } else if (textattribute.equals(TextAttribute.SIZE)) {
                 Object obj = iter.getAttributes().get(textattribute);
-                if(obj instanceof Integer) {
-                    int i = ((Integer)obj).intValue();
+                if (obj instanceof Integer) {
+                    int i = (Integer) obj;
                     setFont(getFont().deriveFont(getFont().getStyle(), i));
-                }
-                else if(obj instanceof Float) {
-                    float f = ((Float)obj).floatValue();
+                } else if (obj instanceof Float) {
+                    float f = (Float) obj;
                     setFont(getFont().deriveFont(getFont().getStyle(), f));
                 }
-            }
-            else if(textattribute.equals(TextAttribute.FOREGROUND)) {
+            } else if (textattribute.equals(TextAttribute.FOREGROUND)) {
                 setColor((Color) iter.getAttributes().get(textattribute));
+<<<<<<< HEAD
             }
             else if(textattribute.equals(TextAttribute.FAMILY)) {
               Font font = getFont();
@@ -352,6 +362,23 @@ public class PdfGraphics2D extends Graphics2D {
               Map<TextAttribute,Object> fontAttributes = (Map<TextAttribute,Object>) font.getAttributes();
               fontAttributes.put(TextAttribute.WEIGHT, iter.getAttributes().get(textattribute));
               setFont(font.deriveFont(fontAttributes));
+=======
+            } else if (textattribute.equals(TextAttribute.FAMILY)) {
+                Font font = getFont();
+                Map fontAttributes = font.getAttributes();
+                fontAttributes.put(TextAttribute.FAMILY, iter.getAttributes().get(textattribute));
+                setFont(font.deriveFont(fontAttributes));
+            } else if (textattribute.equals(TextAttribute.POSTURE)) {
+                Font font = getFont();
+                Map fontAttributes = font.getAttributes();
+                fontAttributes.put(TextAttribute.POSTURE, iter.getAttributes().get(textattribute));
+                setFont(font.deriveFont(fontAttributes));
+            } else if (textattribute.equals(TextAttribute.WEIGHT)) {
+                Font font = getFont();
+                Map fontAttributes = font.getAttributes();
+                fontAttributes.put(TextAttribute.WEIGHT, iter.getAttributes().get(textattribute));
+                setFont(font.deriveFont(fontAttributes));
+>>>>>>> refs/remotes/origin/master
             }
         }
     }
@@ -413,11 +440,20 @@ public class PdfGraphics2D extends Graphics2D {
                                      ? TextAttribute.WIDTH_REGULAR
                                      : fontTextAttributeWidth;
             if (!TextAttribute.WIDTH_REGULAR.equals(fontTextAttributeWidth))
+<<<<<<< HEAD
                 cb.setHorizontalScaling(100.0f / fontTextAttributeWidth.floatValue());
 
+=======
+                cb.setHorizontalScaling(100.0f / fontTextAttributeWidth);
+            
+>>>>>>> refs/remotes/origin/master
             // Check if we need to simulate a bold font.
             // Do nothing if the BaseFont is already bold. This test is not foolproof but it will work most of the times.
+<<<<<<< HEAD
             if (baseFont.getPostscriptFontName().toLowerCase(Locale.ROOT).indexOf("bold") < 0) {
+=======
+            if (!baseFont.getPostscriptFontName().toLowerCase(Locale.ROOT).contains("bold")) {
+>>>>>>> refs/remotes/origin/master
                 // Get the weight of the font so we can detect fonts with a weight
                 // that makes them bold, but the Font.isBold() value is false.
                 Float weight = (Float) font.getAttributes().get(TextAttribute.WEIGHT);
@@ -425,10 +461,10 @@ public class PdfGraphics2D extends Graphics2D {
                     weight = (font.isBold()) ? TextAttribute.WEIGHT_BOLD
                                              : TextAttribute.WEIGHT_REGULAR;
                 }
-                if ((font.isBold() || (weight.floatValue() >= TextAttribute.WEIGHT_SEMIBOLD.floatValue()))
+                if ((font.isBold() || (weight >= TextAttribute.WEIGHT_SEMIBOLD))
                     && (font.getFontName().equals(font.getName()))) {
                     // Simulate a bold font.
-                    float strokeWidth = font.getSize2D() * (weight.floatValue() - TextAttribute.WEIGHT_REGULAR.floatValue()) / 30f;
+                    float strokeWidth = font.getSize2D() * (weight - TextAttribute.WEIGHT_REGULAR) / 30f;
                     if (strokeWidth != 1) {
                         if(realPaint instanceof Color){
                             cb.setTextRenderingMode(PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE);
@@ -527,7 +563,7 @@ public class PdfGraphics2D extends Graphics2D {
         }
         drawString(sb.toString(),x,y);
 */
-        StringBuffer stringbuffer = new StringBuffer(iter.getEndIndex());
+        StringBuilder stringbuffer = new StringBuilder(iter.getEndIndex());
         for(char c = iter.first(); c != '\uFFFF'; c = iter.next())
         {
             if(iter.getIndex() == iter.getRunStart())
@@ -708,8 +744,8 @@ public class PdfGraphics2D extends Graphics2D {
             else {
                 cb.setLiteral('[');
                 int lim = dash.length;
-                for (int k = 0; k < lim; ++k) {
-                    cb.setLiteral(dash[k]);
+                for (float dash1 : dash) {
+                    cb.setLiteral(dash1);
                     cb.setLiteral(' ');
                 }
                 cb.setLiteral(']');
@@ -931,10 +967,17 @@ public class PdfGraphics2D extends Graphics2D {
         if (g2.clip != null)
             g2.followPath(g2.clip, CLIP);
         g2.kid = true;
+<<<<<<< HEAD
         if (this.children == null)
             this.children = new ArrayList<>();
         this.children.add(cb.getInternalBuffer().size());
         this.children.add(g2);
+=======
+        if (this.kids == null)
+            this.kids = new ArrayList();
+        this.kids.add(cb.getInternalBuffer().size());
+        this.kids.add(g2);
+>>>>>>> refs/remotes/origin/master
         return g2;
     }
 
@@ -1300,10 +1343,17 @@ public class PdfGraphics2D extends Graphics2D {
         int last = 0;
         int pos = 0;
         ByteBuffer buf2 = cb.getInternalBuffer();
+<<<<<<< HEAD
         if (children != null) {
             for (int k = 0; k < children.size(); k += 2) {
                 pos = ((Integer)children.get(k)).intValue();
                 PdfGraphics2D g2 = (PdfGraphics2D)children.get(k + 1);
+=======
+        if (kids != null) {
+            for (int k = 0; k < kids.size(); k += 2) {
+                pos = (Integer) kids.get(k);
+                PdfGraphics2D g2 = (PdfGraphics2D)kids.get(k + 1);
+>>>>>>> refs/remotes/origin/master
                 g2.cb.restoreState();
                 g2.cb.restoreState();
                 buf.append(buf2.getBuffer(), last, pos - last);

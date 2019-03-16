@@ -516,16 +516,23 @@ public class PdfReader implements PdfViewerPreferences, Closeable {
   public Rectangle getBoxSize(int index, String boxName) {
     PdfDictionary page = pageRefs.getPageNRelease(index);
     PdfArray box = null;
-    if (boxName.equals("trim"))
-      box = (PdfArray) getPdfObjectRelease(page.get(PdfName.TRIMBOX));
-    else if (boxName.equals("art"))
-      box = (PdfArray) getPdfObjectRelease(page.get(PdfName.ARTBOX));
-    else if (boxName.equals("bleed"))
-      box = (PdfArray) getPdfObjectRelease(page.get(PdfName.BLEEDBOX));
-    else if (boxName.equals("crop"))
-      box = (PdfArray) getPdfObjectRelease(page.get(PdfName.CROPBOX));
-    else if (boxName.equals("media"))
-      box = (PdfArray) getPdfObjectRelease(page.get(PdfName.MEDIABOX));
+      switch (boxName) {
+          case "trim":
+              box = (PdfArray) getPdfObjectRelease(page.get(PdfName.TRIMBOX));
+              break;
+          case "art":
+              box = (PdfArray) getPdfObjectRelease(page.get(PdfName.ARTBOX));
+              break;
+          case "bleed":
+              box = (PdfArray) getPdfObjectRelease(page.get(PdfName.BLEEDBOX));
+              break;
+          case "crop":
+              box = (PdfArray) getPdfObjectRelease(page.get(PdfName.CROPBOX));
+              break;
+          case "media":
+              box = (PdfArray) getPdfObjectRelease(page.get(PdfName.MEDIABOX));
+              break;
+      }
     if (box == null)
       return null;
     return getNormalizedRectangle(box);
@@ -1930,23 +1937,23 @@ public class PdfReader implements PdfViewerPreferences, Closeable {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     boolean first = true;
     int n1 = 0;
-    for (int k = 0; k < in.length; ++k) {
-      int ch = in[k] & 0xff;
-      if (ch == '>')
-        break;
-      if (PRTokeniser.isWhitespace(ch))
-        continue;
-      int n = PRTokeniser.getHex(ch);
-      if (n == -1)
-        throw new RuntimeException(
-            MessageLocalization
-                .getComposedMessage("illegal.character.in.asciihexdecode"));
-      if (first)
-        n1 = n;
-      else
-        out.write((byte) ((n1 << 4) + n));
-      first = !first;
-    }
+      for (byte b : in) {
+          int ch = b & 0xff;
+          if (ch == '>')
+              break;
+          if (PRTokeniser.isWhitespace(ch))
+              continue;
+          int n = PRTokeniser.getHex(ch);
+          if (n == -1)
+              throw new RuntimeException(
+                      MessageLocalization
+                              .getComposedMessage("illegal.character.in.asciihexdecode"));
+          if (first)
+              n1 = n;
+          else
+              out.write((byte) ((n1 << 4) + n));
+          first = !first;
+      }
     if (!first)
       out.write((byte) (n1 << 4));
     return out.toByteArray();
@@ -1963,36 +1970,36 @@ public class PdfReader implements PdfViewerPreferences, Closeable {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     int state = 0;
     int[] chn = new int[5];
-    for (int k = 0; k < in.length; ++k) {
-      int ch = in[k] & 0xff;
-      if (ch == '~')
-        break;
-      if (PRTokeniser.isWhitespace(ch))
-        continue;
-      if (ch == 'z' && state == 0) {
-        out.write(0);
-        out.write(0);
-        out.write(0);
-        out.write(0);
-        continue;
+      for (byte b : in) {
+          int ch = b & 0xff;
+          if (ch == '~')
+              break;
+          if (PRTokeniser.isWhitespace(ch))
+              continue;
+          if (ch == 'z' && state == 0) {
+              out.write(0);
+              out.write(0);
+              out.write(0);
+              out.write(0);
+              continue;
+          }
+          if (ch < '!' || ch > 'u')
+              throw new RuntimeException(
+                      MessageLocalization
+                              .getComposedMessage("illegal.character.in.ascii85decode"));
+          chn[state] = ch - '!';
+          ++state;
+          if (state == 5) {
+              state = 0;
+              int r = 0;
+              for (int j = 0; j < 5; ++j)
+                  r = r * 85 + chn[j];
+              out.write((byte) (r >> 24));
+              out.write((byte) (r >> 16));
+              out.write((byte) (r >> 8));
+              out.write((byte) r);
+          }
       }
-      if (ch < '!' || ch > 'u')
-        throw new RuntimeException(
-            MessageLocalization
-                .getComposedMessage("illegal.character.in.ascii85decode"));
-      chn[state] = ch - '!';
-      ++state;
-      if (state == 5) {
-        state = 0;
-        int r = 0;
-        for (int j = 0; j < 5; ++j)
-          r = r * 85 + chn[j];
-        out.write((byte) (r >> 24));
-        out.write((byte) (r >> 16));
-        out.write((byte) (r >> 8));
-        out.write((byte) r);
-      }
-    }
     int r;
     // We'll ignore the next two lines for the sake of perpetuating broken
     // PDFs
@@ -2250,29 +2257,41 @@ public class PdfReader implements PdfViewerPreferences, Closeable {
     for (int j = 0; j < filters.size(); ++j) {
       name = getPdfObjectRelease(filters.get(j))
           .toString();
-      if (name.equals("/FlateDecode") || name.equals("/Fl")) {
-        b = FlateDecode(b);
-        PdfObject dicParam;
-        if (j < dp.size()) {
-          dicParam = dp.get(j);
-          b = decodePredictor(b, dicParam);
+        switch (name) {
+            case "/FlateDecode":
+            case "/Fl": {
+                b = FlateDecode(b);
+                PdfObject dicParam;
+                if (j < dp.size()) {
+                    dicParam = dp.get(j);
+                    b = decodePredictor(b, dicParam);
+                }
+                break;
+            }
+            case "/ASCIIHexDecode":
+            case "/AHx":
+                b = ASCIIHexDecode(b);
+                break;
+            case "/ASCII85Decode":
+            case "/A85":
+                b = ASCII85Decode(b);
+                break;
+            case "/LZWDecode": {
+                b = LZWDecode(b);
+                PdfObject dicParam;
+                if (j < dp.size()) {
+                    dicParam = dp.get(j);
+                    b = decodePredictor(b, dicParam);
+                }
+                break;
+            }
+            case "/Crypt":
+                break;
+            default:
+                throw new UnsupportedPdfException(
+                        MessageLocalization.getComposedMessage(
+                                "the.filter.1.is.not.supported", name));
         }
-      } else if (name.equals("/ASCIIHexDecode") || name.equals("/AHx"))
-        b = ASCIIHexDecode(b);
-      else if (name.equals("/ASCII85Decode") || name.equals("/A85"))
-        b = ASCII85Decode(b);
-      else if (name.equals("/LZWDecode")) {
-        b = LZWDecode(b);
-        PdfObject dicParam;
-        if (j < dp.size()) {
-          dicParam = dp.get(j);
-          b = decodePredictor(b, dicParam);
-        }
-      } else if (name.equals("/Crypt")) {
-      } else
-        throw new UnsupportedPdfException(
-            MessageLocalization.getComposedMessage(
-                "the.filter.1.is.not.supported", name));
     }
     return b;
   }

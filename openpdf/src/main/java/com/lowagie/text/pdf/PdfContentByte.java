@@ -1179,7 +1179,7 @@ public class PdfContentByte {
                             pimage.put(PdfName.DECODEPARMS, decodeparms);
                         }
                     }
-                    for (PdfName key :pimage.getKeys()) {
+                    for (PdfName key : pimage.getKeys()) {
                         PdfObject value = pimage.get(key);
                         String s = abrev.get(key);
                         if (s == null)
@@ -1187,12 +1187,12 @@ public class PdfContentByte {
                         content.append(s);
                         boolean check = true;
                         if (key.equals(PdfName.COLORSPACE) && value.isArray()) {
-                            PdfArray ar = (PdfArray)value;
+                            PdfArray ar = (PdfArray) value;
                             if (ar.size() == 4
-                                && PdfName.INDEXED.equals(ar.getAsName(0))
-                                && ar.getPdfObject(1).isName()
-                                && ar.getPdfObject(2).isNumber()
-                                && ar.getPdfObject(3).isString()
+                                    && PdfName.INDEXED.equals(ar.getAsName(0))
+                                    && ar.getPdfObject(1).isName()
+                                    && ar.getPdfObject(2).isNumber()
+                                    && ar.getPdfObject(3).isString()
                             ) {
                                 check = false;
                             }
@@ -1450,7 +1450,7 @@ public class PdfContentByte {
      */
     public static PdfTextArray getKernArray(String text, BaseFont font) {
         PdfTextArray pa = new PdfTextArray();
-        StringBuffer acc = new StringBuffer();
+        StringBuilder acc = new StringBuilder();
         int len = text.length() - 1;
         char[] c = text.toCharArray();
         if (len >= 0)
@@ -1618,8 +1618,7 @@ public class PdfContentByte {
      */
     static void escapeString(byte[] b, ByteBuffer content) {
         content.append_i('(');
-        for (int k = 0; k < b.length; ++k) {
-            byte c = b[k];
+        for (byte c : b) {
             switch (c) {
                 case '\r':
                     content.append("\\r");

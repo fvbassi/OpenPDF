@@ -65,7 +65,7 @@ public class FileList
 
   private static final long serialVersionUID = -7238230038043975672L;
 
-  Vector<RowContainer> filevector = new Vector<RowContainer>();
+  Vector<RowContainer> filevector = new Vector<>();
 
   public FileList() {
     super("FileList", true, true, true);
@@ -104,7 +104,7 @@ public class FileList
   JScrollPane jScrollPane1 = new JScrollPane();
   FileTableModel model = new FileTableModel();
   JTable jTable1 = new JTable(model);
-  RowSorter<TableModel> sorter=new TableRowSorter<TableModel> (model);
+  RowSorter<TableModel> sorter= new TableRowSorter<>(model);
   BorderLayout borderLayout3 = new BorderLayout();
   DropTarget dt = new DropTarget(this, DnDConstants.ACTION_COPY_OR_MOVE, this, true, null);
   JPanel jPanel3 = new JPanel();
@@ -140,10 +140,7 @@ public class FileList
         System.out.println(f.toString());
       }
     }
-    catch (IOException ex) {
-        ex.printStackTrace();
-    }
-    catch (UnsupportedFlavorException ex) {
+    catch (IOException | UnsupportedFlavorException ex) {
         ex.printStackTrace();
     }
     dtde.dropComplete(true);
@@ -227,7 +224,7 @@ public class FileList
         return filevector;
     }
     public String getStringreprasentation(){
-        StringBuffer sb=new StringBuffer();
+        StringBuilder sb=new StringBuilder();
        Vector<RowContainer> vec=getFilevector();
        for(RowContainer c: vec){
            sb.append(c.getFile().getAbsolutePath()).append('\n');
