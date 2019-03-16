@@ -60,11 +60,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EmptyStackException;
 import java.util.HashMap;
-<<<<<<< HEAD
 import java.util.List;
 import java.util.Map;
-=======
->>>>>>> refs/remotes/origin/master
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -152,18 +149,8 @@ public class XfaForm {
         DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
         fact.setNamespaceAware(true);
         DocumentBuilder db = fact.newDocumentBuilder();
-<<<<<<< HEAD
-        db.setEntityResolver(new EntityResolver() {
-            @Override
-            public InputSource resolveEntity(String publicId, String systemId) {
-                return new InputSource(new StringReader(""));
-            }
-        });
-        domDocument = db.parse(new ByteArrayInputStream(bout.toByteArray()));
-=======
         db.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
-        domDocument = db.parse(new ByteArrayInputStream(bout.toByteArray()));   
->>>>>>> refs/remotes/origin/master
+        domDocument = db.parse(new ByteArrayInputStream(bout.toByteArray()));
         extractNodes();
     }
 
@@ -798,13 +785,7 @@ public class XfaForm {
             org.w3c.dom.Document doc = n.getOwnerDocument();
             Node n2 = null;
             n = n.getFirstChild();
-<<<<<<< HEAD
-            for (int k = 0; k < stack.size(); ++k) {
-                String part = stack.get(k);
-=======
-            for (Object o : stack) {
-                String part = (String) o;
->>>>>>> refs/remotes/origin/master
+            for (String part : stack) {
                 int idx = part.lastIndexOf('[');
                 String name = part.substring(0, idx);
                 idx = Integer.parseInt(part.substring(idx + 1, part.length() - 1));
@@ -865,11 +846,7 @@ public class XfaForm {
                     if (i == null)
                         i = 0;
                     else
-<<<<<<< HEAD
-                        i = i.intValue() + 1;
-=======
                         i = i + 1;
->>>>>>> refs/remotes/origin/master
                     ss.put(s, i);
                     if (hasChildren(n2)) {
                         stack.push(s + "[" + i.toString() + "]");
@@ -900,18 +877,10 @@ public class XfaForm {
          * Creates a new instance from a Collection with the full names.
          * @param items the Collection
          */
-<<<<<<< HEAD
         public AcroFieldsSearch(Collection<String> items) {
             inverseSearch = new HashMap<>();
             acroShort2LongName = new HashMap<>();
             for (String itemName : items) {
-=======
-        public AcroFieldsSearch(Collection items) {
-            inverseSearch = new HashMap();
-            acroShort2LongName = new HashMap();
-            for (Object item : items) {
-                String itemName = (String) item;
->>>>>>> refs/remotes/origin/master
                 String itemShort = getShortName(itemName);
                 acroShort2LongName.put(itemShort, itemName);
                 inverseSearchAdd(inverseSearch, splitParts(itemShort), itemName);
@@ -1014,11 +983,7 @@ public class XfaForm {
                             if (i == null)
                                 i = 0;
                             else
-<<<<<<< HEAD
-                                i = i.intValue() + 1;
-=======
                                 i = i + 1;
->>>>>>> refs/remotes/origin/master
                             ss.put(nn, i);
                         }
                         stack.push(nn + "[" + i.toString() + "]");
@@ -1038,11 +1003,7 @@ public class XfaForm {
                             if (i == null)
                                 i = 0;
                             else
-<<<<<<< HEAD
-                                i = i.intValue() + 1;
-=======
                                 i = i + 1;
->>>>>>> refs/remotes/origin/master
                             ff.put(nn, i);
                             stack.push(nn + "[" + i.toString() + "]");
                             String unstack = printStack();
@@ -1162,18 +1123,8 @@ public class XfaForm {
 
     public void fillXfaForm(InputSource is) throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-<<<<<<< HEAD
         DocumentBuilder db = dbf.newDocumentBuilder();
-        db.setEntityResolver(new EntityResolver() {
-            @Override
-            public InputSource resolveEntity(String publicId, String systemId) {
-                return new InputSource(new StringReader(""));
-            }
-        });
-=======
-        DocumentBuilder db = dbf.newDocumentBuilder(); 
         db.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
->>>>>>> refs/remotes/origin/master
         Document newdoc = db.parse(is);
         fillXfaForm(newdoc.getDocumentElement());
     }

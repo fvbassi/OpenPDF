@@ -1181,30 +1181,6 @@ public class PdfSignatureAppearance {
         throw new DocumentException(
             MessageLocalization
                 .getComposedMessage("preclose.must.be.called.first"));
-<<<<<<< HEAD
-      for (PdfName key : update.getKeys()) {
-        PdfObject obj = update.get(key);
-        PdfLiteral lit = exclusionLocations.get(key);
-        if (lit == null)
-          throw new IllegalArgumentException(
-              MessageLocalization.getComposedMessage(
-                  "the.key.1.didn.t.reserve.space.in.preclose", key.toString()));
-        try (
-          ByteBuffer bf = new ByteBuffer();
-        ) {
-            obj.toPdf(null, bf);
-            if (bf.size() > lit.getPosLength())
-              throw new IllegalArgumentException(
-                  MessageLocalization.getComposedMessage(
-                      "the.key.1.is.too.big.is.2.reserved.3", key.toString(),
-                      String.valueOf(bf.size()), String.valueOf(lit.getPosLength())));
-            if (tempFile == null)
-              System.arraycopy(bf.getBuffer(), 0, bout, lit.getPosition(),
-                  bf.size());
-            else {
-              raf.seek(lit.getPosition());
-              raf.write(bf.getBuffer(), 0, bf.size());
-=======
       ByteBuffer bf = new ByteBuffer();
         for (PdfName key : update.getKeys()) {
             PdfObject obj = update.get(key);
@@ -1226,7 +1202,6 @@ public class PdfSignatureAppearance {
             else {
                 raf.seek(lit.getPosition());
                 raf.write(bf.getBuffer(), 0, bf.size());
->>>>>>> refs/remotes/origin/master
             }
         }
       if (update.size() != exclusionLocations.size())

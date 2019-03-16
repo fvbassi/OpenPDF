@@ -1304,12 +1304,7 @@ public class PdfWriter extends DocWriter implements
             }
         }
         // [F13] add the OCG layers
-<<<<<<< HEAD
         for (PdfOCG layer : documentOCG) {
-=======
-        for (Object o : documentOCG) {
-            PdfOCG layer = (PdfOCG) o;
->>>>>>> refs/remotes/origin/master
             addToBody(layer.getPdfObject(), layer.getRef());
         }
     }
@@ -2175,11 +2170,7 @@ public class PdfWriter extends DocWriter implements
 
     /** The form XObjects in this document. The key is the xref and the value
         is Object[]{PdfName, template}.*/
-<<<<<<< HEAD
     protected Map<PdfIndirectReference, Object[]> formXObjects = new LinkedHashMap<>();
-=======
-    protected LinkedHashMap<PdfIndirectReference, Object[]> formXObjects = new LinkedHashMap<>();
->>>>>>> refs/remotes/origin/master
 
     /** The name counter for the form XObjects name. */
     protected int formXObjectsCounter = 1;
@@ -2247,11 +2238,7 @@ public class PdfWriter extends DocWriter implements
 
 //  [F5] adding pages imported form other PDF documents
 
-<<<<<<< HEAD
     protected Map<PdfReader, PdfReaderInstance> importedPages = new HashMap<>();
-=======
-    protected HashMap<PdfReader, PdfReaderInstance> importedPages = new HashMap<>();
->>>>>>> refs/remotes/origin/master
 
     /**
      * Use this method to get a page from other PDF document.
@@ -2523,15 +2510,9 @@ public class PdfWriter extends DocWriter implements
 
     private void addASEvent(PdfName event, PdfName category) {
         PdfArray arr = new PdfArray();
-<<<<<<< HEAD
         for (PdfOCG ocg : documentOCG) {
             PdfLayer layer = (PdfLayer)ocg;
             PdfDictionary usage = (PdfDictionary)layer.get(PdfName.USAGE);
-=======
-        for (Object o : documentOCG) {
-            PdfLayer layer = (PdfLayer) o;
-            PdfDictionary usage = (PdfDictionary) layer.get(PdfName.USAGE);
->>>>>>> refs/remotes/origin/master
             if (usage != null && usage.get(category) != null)
                 arr.add(layer.getRef());
         }
@@ -2562,13 +2543,8 @@ public class PdfWriter extends DocWriter implements
         }
         if (OCProperties.get(PdfName.OCGS) == null) {
             PdfArray gr = new PdfArray();
-<<<<<<< HEAD
             for (PdfOCG ocg : documentOCG) {
                 PdfLayer layer = (PdfLayer)ocg;
-=======
-            for (Object o : documentOCG) {
-                PdfLayer layer = (PdfLayer) o;
->>>>>>> refs/remotes/origin/master
                 gr.add(layer.getRef());
             }
             OCProperties.put(PdfName.OCGS, gr);
@@ -2582,26 +2558,16 @@ public class PdfWriter extends DocWriter implements
                 it.remove();
         }
         PdfArray order = new PdfArray();
-<<<<<<< HEAD
         for (PdfOCG ocg : docOrder) {
             PdfLayer layer = (PdfLayer)ocg;
-=======
-        for (Object o1 : docOrder) {
-            PdfLayer layer = (PdfLayer) o1;
->>>>>>> refs/remotes/origin/master
             getOCGOrder(order, layer);
         }
         PdfDictionary d = new PdfDictionary();
         OCProperties.put(PdfName.D, d);
         d.put(PdfName.ORDER, order);
         PdfArray gr = new PdfArray();
-<<<<<<< HEAD
         for (PdfOCG ocg : documentOCG) {
             PdfLayer layer = (PdfLayer)ocg;
-=======
-        for (Object o : documentOCG) {
-            PdfLayer layer = (PdfLayer) o;
->>>>>>> refs/remotes/origin/master
             if (!layer.isOn())
                 gr.add(layer.getRef());
         }
@@ -3135,11 +3101,8 @@ public class PdfWriter extends DocWriter implements
      * A HashSet with Stream objects containing JBIG2 Globals
      * @since 2.1.5
      */
-<<<<<<< HEAD
     protected Map<PdfStream, PdfIndirectReference> JBIG2Globals = new HashMap<>();
-=======
-    protected HashMap<PdfStream, PdfIndirectReference> JBIG2Globals = new HashMap<>();
->>>>>>> refs/remotes/origin/master
+
     /**
      * Gets an indirect reference to a JBIG2 Globals stream.
      * Adds the stream if it hasn't already been added to the writer.
