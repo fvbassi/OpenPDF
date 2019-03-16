@@ -542,12 +542,12 @@ public class AcroFields {
           case "Tf":
             if (stack.size() >= 2) {
               ret[DA_FONT] = stack.get(stack.size() - 2);
-              ret[DA_SIZE] = new Float((String) stack.get(stack.size() - 1));
+              ret[DA_SIZE] = new Float(stack.get(stack.size() - 1));
             }
             break;
           case "g":
             if (stack.size() >= 1) {
-              float gray = new Float((String) stack.get(stack.size() - 1));
+              float gray = new Float(stack.get(stack.size() - 1));
               if (gray != 0) {
                 ret[DA_COLOR] = new GrayColor(gray);
               }
@@ -555,18 +555,18 @@ public class AcroFields {
             break;
           case "rg":
             if (stack.size() >= 3) {
-              float red = new Float((String) stack.get(stack.size() - 3));
-              float green = new Float((String) stack.get(stack.size() - 2));
-              float blue = new Float((String) stack.get(stack.size() - 1));
+              float red = new Float(stack.get(stack.size() - 3));
+              float green = new Float(stack.get(stack.size() - 2));
+              float blue = new Float(stack.get(stack.size() - 1));
               ret[DA_COLOR] = new Color(red, green, blue);
             }
             break;
           case "k":
             if (stack.size() >= 4) {
-              float cyan = new Float((String) stack.get(stack.size() - 4));
-              float magenta = new Float((String) stack.get(stack.size() - 3));
-              float yellow = new Float((String) stack.get(stack.size() - 2));
-              float black = new Float((String) stack.get(stack.size() - 1));
+              float cyan = new Float(stack.get(stack.size() - 4));
+              float magenta = new Float(stack.get(stack.size() - 3));
+              float yellow = new Float(stack.get(stack.size() - 2));
+              float black = new Float(stack.get(stack.size() - 1));
               ret[DA_COLOR] = new CMYKColor(cyan, magenta, yellow, black);
             }
             break;

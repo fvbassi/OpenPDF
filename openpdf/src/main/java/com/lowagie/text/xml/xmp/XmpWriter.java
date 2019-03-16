@@ -61,11 +61,6 @@ import com.lowagie.text.pdf.PdfObject;
 import com.lowagie.text.pdf.PdfString;
 import com.lowagie.text.pdf.PdfWriter;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.util.Map;
-
 /**
  * With this class you can create an Xmp Stream that can be used for adding
  * Metadata to a PDF Dictionary. Remark that this class doesn't cover the

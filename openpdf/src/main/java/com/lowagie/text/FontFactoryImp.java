@@ -56,8 +56,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -527,7 +525,7 @@ public class FontFactoryImp implements FontProvider {
                 // register all the font names with all the locales
                 String[][] names = (String[][])allNames[2]; //full name
                 for (String[] name1 : names) {
-                    trueTypeFonts.setProperty(name1[3].toLowerCase(), path);
+                    trueTypeFonts.put(name1[3].toLowerCase(), path);
                 }
                 String fullName = null;
                 String familyName = null;

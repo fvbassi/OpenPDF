@@ -1,7 +1,5 @@
 package com.lowagie.text.pdf;
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 
 import com.lowagie.text.Document;

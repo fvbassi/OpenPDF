@@ -49,10 +49,6 @@
 
 package com.lowagie.text.pdf;
 
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.ExceptionConverter;
-import com.lowagie.text.error_messages.MessageLocalization;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,7 +87,7 @@ class TrueTypeFontSubSet {
     static final int WE_HAVE_A_TWO_BY_TWO = 128;
 
 
-    /** 
+    /**
      * Contains the location of the several tables. The key is the name of
      * the table and the value is an <CODE>int[3]</CODE> where position 0
      * is the checksum, position 1 is the offset from the start of the file

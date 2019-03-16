@@ -56,7 +56,6 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.security.PrivateKey;
 import java.security.cert.CRL;
-import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -147,7 +146,7 @@ public class PdfSignatureAppearance {
   private String digestEncryptionAlgorithm;
   private Map<PdfName,PdfLiteral> exclusionLocations;
 
-  private Certificate[] certChain;
+  private X509Certificate[] certChain;
 
   // ******************************************************************************
 
@@ -283,7 +282,7 @@ public class PdfSignatureAppearance {
     this.privKey = privKey;
     if (certificate == null)
         throw new IllegalArgumentException("Null certificate not allowed");
-    this.certChain = new Certificate[1];
+    this.certChain = new X509Certificate[1];
     this.certChain[0] = certificate;
     if (crl != null) {
         this.crlList = new CRL[1];
@@ -295,7 +294,7 @@ public class PdfSignatureAppearance {
   /**
    * Sets the cryptographic parameters.
    */
-  public void setCrypto(PrivateKey privKey, Certificate[] certChain, CRL[] crlList, PdfName filter) {
+  public void setCrypto(PrivateKey privKey, X509Certificate[] certChain, CRL[] crlList, PdfName filter) {
       this.privKey = privKey;
       this.certChain = certChain;
       this.crlList = crlList;
